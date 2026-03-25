@@ -46,18 +46,20 @@ const skills = [
 export default function Skills() {
   return (
     <section id="skills">
-      <p className="section-label reveal">02 &mdash; Skills</p>
-      <div className="skills-grid">
-        {skills.map((s) => (
-          <div key={s.name} className={`skill-card reveal ${s.delay}`}>
-            <div className="skill-icon">{s.icon}</div>
-            <div className="skill-name">{s.name}</div>
-            <p className="skill-desc">{s.desc}</p>
-            <div className="skill-bar-wrap">
-              <div className="skill-bar" data-w={s.bar}></div>
+      <div className="container">
+        <p className="section-label reveal">02 &mdash; Skills</p>
+        <div className="skills-grid">
+          {skills.map((s) => (
+            <div key={s.name} className={`skill-card reveal ${s.delay}`}>
+              <div className="skill-icon">{s.icon}</div>
+              <div className="skill-name">{s.name}</div>
+              <p className="skill-desc">{s.desc}</p>
+              <div className="skill-bar-wrap">
+                <div className="skill-bar" data-w={s.bar}></div>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
