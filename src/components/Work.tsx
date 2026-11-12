@@ -3,9 +3,7 @@ import Link from "next/link";
 import { Ar, Spark } from "./ui";
 import { companies } from "../data/site";
 import { buttonVariants } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 
-const Todo = ({ text }: { text: string }) => <span className="todo">{text}</span>;
 
 // Home: "Where I've worked", 3 full-screen panels that swap while pinned (animation in HomeFx).
 export function WorkPanels() {
@@ -25,16 +23,15 @@ export function WorkPanels() {
             <div className="wp-grid">
               <div className="wp-box wp-main">
                 <small>{c.main.label}</small>
-                <div className="wp-big"><span className="pcount">{c.main.value}</span><Badge variant="demo">demo</Badge></div>
+                <div className="wp-big"><span className="pcount">{c.main.value}</span></div>
                 <div className="wp-chart"><Spark ys={c.chart} w={600} className="wpspark" /></div>
-                <small className="wp-axis">Last 12 months</small>
+                <small className="wp-axis">{c.span}</small>
               </div>
               {c.stats.map((s) => (
-                <div key={s.label} className="wp-box"><b className="pcount">{s.value}</b><Badge variant="demo">demo</Badge><small>{s.label}</small></div>
+                <div key={s.label} className="wp-box"><b className="pcount">{s.value}</b><small>{s.label}</small></div>
               ))}
               <div className="wp-box wp-did">
-                <small>What I did</small>
-                <p>{c.did || <Todo text="[Your tasks, in your words]" />}</p>
+                <b className="pcount">{c.worth.value}</b><small>{c.worth.label}</small>
                 <a className="lnk" href={c.url} target="_blank" rel="noopener">Visit {c.host}<Ar /></a>
               </div>
             </div>
@@ -46,7 +43,7 @@ export function WorkPanels() {
               <button key={c.name} type="button" data-go={i} className={i === 0 ? "on" : undefined}><i><em></em></i>{c.name}</button>
             ))}
           </div>
-          <span>Numbers are placeholders for now.</span>
+          <span>Source: Ahrefs, Google search visitors.</span>
           <Link className={buttonVariants({ variant: "brandGhost" })} href="/work" style={{ color: "#EEF1F8" }}>See all my work<Ar /></Link>
         </div>
       </div>
@@ -70,17 +67,15 @@ export function WorkList() {
             </div>
             <div className="wf-body">
               <div className="wf-stats">
-                {c.stats.map((s) => (
+                {[...c.stats, c.worth].map((s) => (
                   <div key={s.label}><span className="count">{s.value}</span><small>{s.label}</small></div>
                 ))}
-                <span style={{ alignSelf: "flex-start" }}><Badge variant="demo">demo</Badge></span>
               </div>
               <div className="wf-chart">
-                <div className="wf-axis"><span>12 months ago</span><span>now</span></div>
+                <div className="wf-axis"><span>{c.span.split(" → ")[0]}</span><span>{c.span.split(" → ")[1]}</span></div>
                 <Spark ys={c.chart} w={560} className="wspark tall" />
               </div>
             </div>
-            <div className="wf-did"><strong>What I did</strong>{c.did || <Todo text="Your tasks, in your words" />}</div>
           </article>
         ))}
       </div>

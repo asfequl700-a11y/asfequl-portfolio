@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { ensureSmoother, gsap, refreshSoon, isMobile, reducedMotion, ScrollTrigger } from "../lib/gsap";
+import { ensureSmoother, gsap, refreshSoon, isMobile, reducedMotion, ScrollTrigger, snapPts } from "../lib/gsap";
 
 const q = <T extends Element = HTMLElement>(root: ParentNode, sel: string) => root.querySelector(sel) as T;
 const qa = <T extends Element = HTMLElement>(root: ParentNode, sel: string) => Array.from(root.querySelectorAll<T>(sel));
@@ -22,7 +22,10 @@ export default function HomeFx() {
       wipeFx(); // last, same reason
     });
     refreshSoon();
+    // hero fades in only after the setup above has finished its heavy work, so the freeze happens behind a calm screen
+    requestAnimationFrame(() => document.documentElement.classList.add("hero-go"));
     return () => {
+      document.documentElement.classList.remove("hero-go");
       ac.abort(); ctx.revert();
       document.getElementById("how")?.classList.remove("fx");
       document.body.classList.remove("grain");
@@ -75,7 +78,7 @@ function wipeFx() {
     // stay still on screen and only crossfade, old out first, new in second.
     const vh = () => window.innerHeight;
     const out = Array.from(secs[i - 1].children), inn = Array.from(s.children);
-    gsap.timeline({ scrollTrigger: { trigger: s, start: "top bottom", end: "top top", scrub: true, invalidateOnRefresh: true } })
+    gsap.timeline({ scrollTrigger: { trigger: s, start: "top bottom", end: "top top", scrub: true, invalidateOnRefresh: true, ...snapPts() } })
       .fromTo(out, { y: 0 }, { y: () => vh(), ease: "none", duration: 1, immediateRender: false }, 0)
       .fromTo(inn, { y: () => -vh() }, { y: 0, ease: "none", duration: 1 }, 0)
       .fromTo(out, { autoAlpha: 1 }, { autoAlpha: 0, ease: "power1.in", duration: 0.5, immediateRender: false }, 0)
@@ -89,25 +92,11 @@ function gapFx() {
   gsap.from(qa(g, ".gl span"), { yPercent: 110, opacity: 0, duration: 0.9, ease: "power4.out", stagger: 0.12, scrollTrigger: { trigger: g, start: "top 75%" } });
   const cards = qa(g, ".gc"), cta = q(g, ".gcta");
   const count = (el: HTMLElement) => { const o = { v: 0 }; el.textContent = "0"; return gsap.to(o, { v: Number(el.dataset.to), duration: 0.8, ease: "power2.out", onUpdate: () => { el.textContent = String(Math.round(o.v)); } }); };
-  if (isMobile()) {
-    gsap.from(cards, { y: 60, opacity: 0, duration: 0.8, ease: "power3.out", stagger: 0.15, scrollTrigger: { trigger: q(g, ".gs"), start: "top 80%" } });
-    qa(g, ".gcount").forEach((el) => { el.textContent = "0"; ScrollTrigger.create({ trigger: el, start: "top 85%", once: true, onEnter: () => { count(el).duration(1.6); } }); });
-    gsap.from(qa(g, ".bar i b"), { scaleX: 0, duration: 1.2, ease: "power3.inOut", stagger: 0.1, scrollTrigger: { trigger: q(g, ".gs"), start: "top 70%" } });
-    gsap.from(cta, { y: 40, opacity: 0, duration: 0.8, ease: "power3.out", scrollTrigger: { trigger: cta, start: "top 88%" } });
-    return;
-  }
-  // Desktop: pin the section; each scroll step reveals the next card, then the call-to-action bar,
-  // then a short hold before the normal crossfade to the next section. Everything is scrubbed, so it follows the wheel.
-  gsap.set([...cards, cta], { autoAlpha: 0, y: 50 });
-  const tl = gsap.timeline({ scrollTrigger: { trigger: g, start: "top top", end: () => "+=" + window.innerHeight * 2.5, pin: true, scrub: 0.6, invalidateOnRefresh: true } });
-  cards.forEach((c, i) => {
-    const t = i * 1.2;
-    tl.to(c, { autoAlpha: 1, y: 0, duration: 1, ease: "power2.out" }, t)
-      .from(qa(c, ".bar i b"), { scaleX: 0, duration: 0.8, stagger: 0.1, ease: "power2.out" }, t + 0.3);
-    qa(c, ".gcount").forEach((el) => tl.add(count(el), t + 0.2));
-  });
-  tl.to(cta, { autoAlpha: 1, y: 0, duration: 1, ease: "power2.out" }, cards.length * 1.2)
-    .to({}, { duration: 0.6 }); // short hold with everything visible
+  // plays once when reached (no pin, no scrub), so a stop mid-scroll never leaves cards half shown
+  gsap.from(cards, { y: 60, opacity: 0, duration: 0.8, ease: "power3.out", stagger: 0.15, scrollTrigger: { trigger: q(g, ".gs"), start: "top 80%" } });
+  qa(g, ".gcount").forEach((el) => { el.textContent = "0"; ScrollTrigger.create({ trigger: el, start: "top 85%", once: true, onEnter: () => { count(el).duration(1.6); } }); });
+  gsap.from(qa(g, ".bar i b"), { scaleX: 0, duration: 1.2, ease: "power3.inOut", stagger: 0.1, scrollTrigger: { trigger: q(g, ".gs"), start: "top 70%" } });
+  gsap.from(cta, { y: 40, opacity: 0, duration: 0.8, ease: "power3.out", scrollTrigger: { trigger: cta, start: "top 88%" } });
 }
 
 function agentFx(mob: boolean) {
@@ -135,8 +124,10 @@ function agentFx(mob: boolean) {
   });
   tl.to(q(g, ".ft"), { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, "+=.2");
   st.forEach((s) => s.classList.remove("on"));
-  if (!mob) gsap.set(g, { padding: "72px 0" });
-  ScrollTrigger.create({ animation: tl, trigger: g, start: mob ? "top 65%" : "top top", end: mob ? "bottom 75%" : "+=1800", pin: !mob, scrub: 0.6 });
+  if (!mob) gsap.set(g, { padding: "var(--hsafe) 0 48px" });
+  if (mob) { ScrollTrigger.create({ animation: tl, trigger: g, start: "top 65%" }); return; } // plays once, no half states
+  const dur = tl.duration();
+  ScrollTrigger.create({ animation: tl, trigger: g, start: "top top", end: "+=1800", pin: true, scrub: true, ...snapPts(AT.map((a) => (a + 0.6) / dur)) });
 }
 
 function workFx(signal: AbortSignal) {
@@ -145,6 +136,7 @@ function workFx(signal: AbortSignal) {
   sec.classList.add("pinned");
   const panels = qa(sec, ".wp-panel"), btns = qa<HTMLButtonElement>(sec, ".wp-prog button");
   let cur = -1;
+  const sparks = qa<SVGSVGElement>(sec, ".wpspark");
   const count = (el: HTMLElement) => {
     const t = el.getAttribute("data-t") || el.textContent || "";
     el.setAttribute("data-t", t);
@@ -166,12 +158,13 @@ function workFx(signal: AbortSignal) {
     gsap.fromTo(qa(p, ".wp-box"), { opacity: 0, y: 40, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out", stagger: 0.08, delay: old ? 0.3 : 0.1 });
     gsap.fromTo(q(p, ".wp-logo"), { rotate: -12, scale: 0.6 }, { rotate: 0, scale: 1, duration: 0.7, ease: "back.out(2)", delay: old ? 0.25 : 0 });
     qa(p, ".pcount").forEach(count);
-    const line = p.querySelector(".wpspark .line");
-    if (line) gsap.fromTo(line, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.4, ease: "power2.inOut", delay: 0.4 });
+    // graph draws itself in one go as soon as the panel shows, no scrolling needed
+    gsap.fromTo(sparks[k], { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 1.4, ease: "power2.inOut", delay: old ? 0.5 : 0.3, overwrite: true });
   };
   panels.forEach((p, j) => { if (j) p.classList.remove("on"); });
   const st = ScrollTrigger.create({
     trigger: sec, start: "top top", end: "+=" + panels.length * innerHeight, pin: true, anticipatePin: 1,
+    ...snapPts(panels.map((_, j) => (j + 0.7) / panels.length)), // each panel fully shown, graph drawn
     onEnter: () => { if (cur < 0) show(0); },
     onUpdate: (s) => {
       const n = panels.length;
@@ -182,7 +175,7 @@ function workFx(signal: AbortSignal) {
   btns.forEach((b, j) => b.addEventListener("click", () => {
     const y = st.start + ((j + 0.5) / panels.length) * (st.end - st.start);
     const sm = ensureSmoother();
-    if (sm) sm.scrollTo(y, true); else scrollTo({ top: y, behavior: "smooth" });
+    if (sm) sm.scrollTo(y, { duration: 0.9 }); else scrollTo({ top: y, behavior: "smooth" });
   }, { signal }));
   if (st.isActive || st.progress > 0) show(Math.min(panels.length - 1, Math.floor(st.progress * panels.length)));
   // undo the pinned layout when the page unmounts (ctx.revert handles tweens, not classes)
@@ -205,7 +198,8 @@ function howStory(g: HTMLElement) {
   tl.to(dia, { opacity: 1, duration: 0.3 }, end)
     .fromTo(q(dia, ".dl"), { scaleX: 0 }, { scaleX: 1, duration: 1, ease: "none" }, end)
     .from(qa(dia, ".dn"), { y: 30, opacity: 0, duration: 0.4, ease: "power3.out", stagger: 0.25 }, end);
-  ScrollTrigger.create({ animation: tl, trigger: g, start: "top top", end: "+=" + innerHeight * 4, pin: true, scrub: 0.6 });
+  const dur = tl.duration();
+  ScrollTrigger.create({ animation: tl, trigger: g, start: "top top", end: "+=" + innerHeight * 4, pin: true, scrub: true, ...snapPts(slides.map((_, i) => (i * 1.2 + 0.65) / dur)) });
 }
 
 function howFx(mob: boolean) {
@@ -222,5 +216,5 @@ function howFx(mob: boolean) {
       .from(q(s, "h3"), { y: 20, opacity: 0, duration: 0.45, ease: "power3.out" }, at + 0.1)
       .from(qa(s, "li"), { y: 14, opacity: 0, duration: 0.4, ease: "power3.out", stagger: 0.1 }, at + 0.25);
   });
-  ScrollTrigger.create({ animation: tl, trigger: g, start: "top 65%", end: "bottom bottom", scrub: 0.6, refreshPriority: 1 });
+  ScrollTrigger.create({ animation: tl, trigger: g, start: "top 65%", refreshPriority: 1 }); // plays once
 }

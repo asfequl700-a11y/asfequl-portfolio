@@ -18,13 +18,13 @@ export default function ProjectsPage() {
       <div className="scene ascene" aria-label="Animation: the agent searches YouTube, scores each channel, saves it to a sheet and sends an alert">
         <span className="pill">Runs every day</span>
         <div className="aflow">
-          <div className="wfn"><div className="wfbox lit-6"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg></div>Search YouTube</div>
+          <div className="wfn"><div className="wfbox lit-6"><img src="/logos/youtube.svg" alt="" width={34} height={34} /></div>Search YouTube</div>
           <div className="alink grow-14"></div>
-          <div className="wfn"><div className="wfbox lit-18"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z" /></svg></div>Gemini scores</div>
+          <div className="wfn"><div className="wfbox lit-18"><img src="/logos/googlegemini.svg" alt="" width={34} height={34} /></div>Gemini scores</div>
           <div className="alink grow-26"></div>
-          <div className="wfn"><div className="wfbox lit-30"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M3 10h18M9 4v16" /></svg></div>Save to sheet</div>
+          <div className="wfn"><div className="wfbox lit-30"><img src="/logos/googlesheets.svg" alt="" width={34} height={34} /></div>Save to sheet</div>
           <div className="alink grow-38"></div>
-          <div className="wfn"><div className="wfbox lit-42"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0" /></svg></div>Discord alert</div>
+          <div className="wfn"><div className="wfbox lit-42"><img src="/logos/discord.svg" alt="" width={34} height={34} /></div>Discord alert</div>
         </div>
         <div className="aout side-50"><span className="ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg></span><div><strong>New lead found</strong><br /><span className="muted">Example channel · score 8/10 · saved</span></div></div>
       </div>
@@ -34,15 +34,15 @@ export default function ProjectsPage() {
     </Card><Card className="agent">
       <div className="scene ascene" aria-label="Animation: a Discord message asks for a video package, the agent researches and writes a script document">
         <span className="pill">Ask in Discord</span>
-        <div className="amsg in-2">&quot;Make a video package on AI tools&quot;</div>
-        <div className="aflow" style={{ top: "120px" }}>
-          <div className="wfn"><div className="wfbox lit-10"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z" /></svg></div>Discord chat</div>
+        <div className="amsg in-2" style={{ top: "20px", left: "170px", right: "24px", width: "fit-content", maxWidth: "calc(100% - 194px)" }}>&quot;Make a video package on AI tools&quot;</div>
+        <div className="aflow">
+          <div className="wfn"><div className="wfbox lit-10"><img src="/logos/discord.svg" alt="" width={34} height={34} /></div>Discord chat</div>
           <div className="alink grow-18"></div>
-          <div className="wfn"><div className="wfbox lit-22"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="6" width="18" height="12" rx="3" /><path d="m10 9 5 3-5 3z" /></svg></div>Study top videos</div>
+          <div className="wfn"><div className="wfbox lit-22"><img src="/logos/youtube.svg" alt="" width={34} height={34} /></div>Study top videos</div>
           <div className="alink grow-30"></div>
-          <div className="wfn"><div className="wfbox lit-34"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z" /></svg></div>Gemini writes</div>
+          <div className="wfn"><div className="wfbox lit-34"><img src="/logos/googlegemini.svg" alt="" width={34} height={34} /></div>Gemini writes</div>
           <div className="alink grow-42"></div>
-          <div className="wfn"><div className="wfbox lit-46"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" /><path d="M14 3v6h6M8 13h8M8 17h5" /></svg></div>Script doc</div>
+          <div className="wfn"><div className="wfbox lit-46"><img src="/logos/googledocs.svg" alt="" width={34} height={34} /></div>Script doc</div>
         </div>
         <div className="aout side-54"><span className="ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg></span><div><strong>Package ready</strong><br /><span className="muted">5 titles · thumbnail idea · script in Google Docs</span></div></div>
       </div>
@@ -53,13 +53,13 @@ export default function ProjectsPage() {
       <div className="scene ascene" aria-label="Animation: new articles come in, AI picks the useful ones, saves them and sends an alert">
         <span className="pill">Watches the web</span>
         <div className="aflow">
-          <div className="wfn"><div className="wfbox lit-6"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16" /><circle cx="5" cy="19" r="1.5" /></svg></div>New articles</div>
+          <div className="wfn"><div className="wfbox lit-6"><img src="/logos/rss.svg" alt="" width={34} height={34} /></div>New articles</div>
           <div className="alink grow-14"></div>
-          <div className="wfn"><div className="wfbox lit-18"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 5h18l-7 8v6l-4 2v-8z" /></svg></div>AI filters</div>
+          <div className="wfn"><div className="wfbox lit-18"><img src="/logos/googlegemini.svg" alt="" width={34} height={34} /></div>AI filters</div>
           <div className="alink grow-26"></div>
-          <div className="wfn"><div className="wfbox lit-30"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M3 10h18M9 4v16" /></svg></div>Save to sheet</div>
+          <div className="wfn"><div className="wfbox lit-30"><img src="/logos/googlesheets.svg" alt="" width={34} height={34} /></div>Save to sheet</div>
           <div className="alink grow-38"></div>
-          <div className="wfn"><div className="wfbox lit-42"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" /><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0" /></svg></div>Discord alert</div>
+          <div className="wfn"><div className="wfbox lit-42"><img src="/logos/discord.svg" alt="" width={34} height={34} /></div>Discord alert</div>
         </div>
         <div className="aout side-50"><span className="ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg></span><div><strong>3 articles worth a look</strong><br /><span className="muted">Summaries saved · the rest skipped</span></div></div>
       </div>
@@ -70,13 +70,13 @@ export default function ProjectsPage() {
       <div className="scene ascene" aria-label="Animation: the agent reads a contact from a sheet, writes an email, sends it and checks for a reply">
         <span className="pill">Emails on a schedule</span>
         <div className="aflow">
-          <div className="wfn"><div className="wfbox lit-6"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M3 10h18M9 4v16" /></svg></div>Contact list</div>
+          <div className="wfn"><div className="wfbox lit-6"><img src="/logos/googlesheets.svg" alt="" width={34} height={34} /></div>Contact list</div>
           <div className="alink grow-14"></div>
           <div className="wfn"><div className="wfbox lit-18"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z" /></svg></div>Write email</div>
           <div className="alink grow-26"></div>
-          <div className="wfn"><div className="wfbox lit-30"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></svg></div>Send by Gmail</div>
+          <div className="wfn"><div className="wfbox lit-30"><img src="/logos/gmail.svg" alt="" width={34} height={34} /></div>Send by Gmail</div>
           <div className="alink grow-38"></div>
-          <div className="wfn"><div className="wfbox lit-42"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 14 4 9l5-5" /><path d="M4 9h10a6 6 0 0 1 6 6v4" /></svg></div>Check replies</div>
+          <div className="wfn"><div className="wfbox lit-42"><img src="/logos/gmail.svg" alt="" width={34} height={34} /></div>Check replies</div>
         </div>
         <div className="aout side-50"><span className="ico"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg></span><div><strong>Sheet updated</strong><br /><span className="muted">Sent · reply marked · next follow-up set</span></div></div>
       </div>

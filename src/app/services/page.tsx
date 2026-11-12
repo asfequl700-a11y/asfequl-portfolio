@@ -5,7 +5,7 @@ import { FinalCta } from "../../components/ui";
 // Ported from _design/v4-Services.dc.html
 export const metadata: Metadata = {
   title: "Services",
-  description: "Websites that make the phone ring, an AI receptionist that answers every call, lead follow-up and n8n automation for the boring jobs.",
+  description: "Websites that make the phone ring, an AI receptionist that answers every call, and AI agents and automation for the boring jobs.",
   alternates: { canonical: "/services" },
 };
 
@@ -58,31 +58,16 @@ export default function ServicesPage() {
 <strong>Job booked</strong><span className="muted" style={{ fontSize: "13px" }}>Tue, 10:00 AM</span></div>
 </div>
 <div className="toast side-58" style={{ position: "absolute", right: "24px", bottom: "18px", width: "270px" }}><span className="ico" style={{ width: "38px", height: "38px", borderRadius: "12px" }}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z" /></svg></span><div><strong>Text to you</strong><small>New job: kitchen leak, Tue 10 AM</small></div></div>
-</div></div><div className="srow"><div style={{ display: "flex", flexDirection: "column", gap: "18px" }}><span className="kick" style={{ margin: "0" }}>03 · Lead follow-up</span><h3 style={{ fontSize: "44px" }}>No enquiry left on read.</h3><p className="muted" style={{ fontSize: "18px" }}>Form fills, emails and DMs get a reply in minutes, then a nudge until they book.</p><ul className="ticks"><li>Instant first reply</li><li>Reminders that stop when they book</li><li>Every lead saved in one sheet</li></ul></div><div className="scene" aria-label="Animation: a new lead arrives, the AI replies, and the lead moves to Booked">
-<span className="pill"><i></i>You&apos;re on a job. The AI is handling it.</span>
-<div style={{ position: "absolute", top: "70px", left: "50%", marginLeft: "-254px", width: "508px", display: "flex", gap: "14px" }}>
-<div className="col"><h4>New</h4></div>
-<div className="col"><h4>Replied</h4></div>
-<div className="col"><h4>Booked</h4><div className="lcard" style={{ marginTop: "auto", opacity: ".55" }}>Dental check-up<br /><span className="muted">Booked yesterday</span></div></div>
-<div className="lcard lead" style={{ position: "absolute", left: "10px", top: "34px", width: "140px", boxSizing: "border-box" }}><strong>Sarah</strong><br /><span className="muted">Leaking tap, needs help this week</span></div>
-<div className="pop-34" style={{ position: "absolute", left: "184px", top: "104px", width: "140px", background: "#2346E8", color: "#FFFFFF", borderRadius: "12px 12px 12px 4px", padding: "8px 10px", fontSize: "12px", boxSizing: "border-box" }}>AI: Hi Sarah, can we come Tue at 10?</div>
-<div className="pop-64" style={{ position: "absolute", left: "358px", top: "104px", width: "140px", background: "#FF6B1A", color: "#141821", fontWeight: "700", borderRadius: "10px", padding: "8px 10px", fontSize: "12.5px", boxSizing: "border-box", textAlign: "center" }}>Booked, Tue 10 AM</div>
-</div>
-</div></div><div className="srow"><div style={{ display: "flex", flexDirection: "column", gap: "18px" }}><span className="kick" style={{ margin: "0" }}>04 · n8n automation</span><h3 style={{ fontSize: "44px" }}>The boring jobs, done for you.</h3><p className="muted" style={{ fontSize: "18px" }}>Copying form details, sending reminders, updating sheets. n8n connects your apps and does it on its own.</p><ul className="ticks"><li>Forms → Sheets → alerts</li><li>Custom flows for your tools</li><li>I show you how it works</li></ul></div><div className="scene" style={{ backgroundColor: "#F7F8FA", backgroundImage: "radial-gradient(#C3CAD5 1.2px,transparent 1.2px)", backgroundSize: "20px 20px" }} aria-label="Animation: a form comes in, n8n saves it to a sheet and alerts the team">
-<div style={{ position: "absolute", left: "48px", right: "48px", top: "34px", height: "100px" }}>
+</div></div><div className="srow"><div style={{ display: "flex", flexDirection: "column", gap: "18px" }}><span className="kick" style={{ margin: "0" }}>03 · AI agents &amp; automation</span><h3 style={{ fontSize: "44px" }}>Your busywork, on autopilot.</h3><p className="muted" style={{ fontSize: "18px" }}>AI agents and n8n workflows that do the repeat work: lead follow-up, emails, reports, YouTube, sheets.</p><ul className="ticks"><li>Custom AI agents</li><li>n8n workflows for your tools</li><li>Leads, emails, reports, YouTube</li></ul></div><div className="scene" style={{ backgroundColor: "#F7F8FA", backgroundImage: "radial-gradient(#C3CAD5 1.2px,transparent 1.2px)", backgroundSize: "20px 20px" }} aria-label="Animation: something new comes in, an AI agent handles it, and you get an alert">
+<div style={{ position: "absolute", left: "48px", right: "48px", top: "40px", height: "100px" }}>
 <div style={{ position: "absolute", left: "36px", right: "36px", top: "35px", height: "2px", background: "#9AA4B4" }}><span className="trav" style={{ top: "-6px", marginLeft: "-7px" }}></span></div>
-<div style={{ position: "relative", zIndex: "2", display: "flex", justifyContent: "space-between" }}>
-<div className="wfn" style={{ width: "72px" }}><span className="wfbox lit-8" style={{ width: "72px", height: "72px" }}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="3" width="14" height="18" rx="2" /><path d="M9 8h6M9 12h6M9 16h3" /></svg></span>Form sent</div>
-<div className="wfn" style={{ width: "72px" }}><span className="wfbox lit-26" style={{ width: "72px", height: "72px" }}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="3" width="16" height="18" rx="2" /><path d="M4 9h16M4 15h16M10 3v18" /></svg></span>Saved</div>
-<div className="wfn" style={{ width: "72px" }}><span className="wfbox lit-46" style={{ width: "72px", height: "72px" }}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10 21h4" /></svg></span>Team alerted</div>
+<div style={{ position: "relative", zIndex: "2", display: "flex", justifyContent: "space-between", textAlign: "center" }}>
+<div className="wfn" style={{ width: "88px" }}><span className="wfbox lit-8" style={{ width: "72px", height: "72px" }}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="3" /><path d="M10 9l5 3-5 3z" /></svg></span>New video or lead</div>
+<div className="wfn" style={{ width: "88px" }}><span className="wfbox lit-26" style={{ width: "72px", height: "72px" }}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="8" width="16" height="12" rx="3" /><path d="M12 4v4M9 13h.01M15 13h.01M9 17h6" /></svg></span>AI agent works</div>
+<div className="wfn" style={{ width: "88px" }}><span className="wfbox lit-46" style={{ width: "72px", height: "72px" }}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10 21h4" /></svg></span>Saved + alert</div>
 </div>
 </div>
-<div style={{ position: "absolute", left: "32px", bottom: "24px", width: "300px", background: "#FFFFFF", borderRadius: "12px", boxShadow: "inset 0 0 0 1px #D6DBE3", fontSize: "12.5px", overflow: "hidden" }}>
-<div style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr 0.8fr", background: "#E9EDF2", padding: "7px 12px", fontWeight: "600" }}><span>Name</span><span>Need</span><span>Time</span></div>
-<div style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr 0.8fr", padding: "7px 12px", borderTop: "1px solid #E9EDF2" }} className="muted"><span>Omar</span><span>Boiler service</span><span>8:15</span></div>
-<div className="in-28" style={{ display: "grid", gridTemplateColumns: "1fr 1.4fr 0.8fr", padding: "7px 12px", borderTop: "1px solid #E9EDF2", background: "#FFF4EC" }}><span>Sarah</span><span>Leaking tap</span><span>9:42</span></div>
-</div>
-<div className="toast side-50" style={{ position: "absolute", right: "24px", bottom: "24px", width: "200px" }}><span className="ico hot" style={{ width: "36px", height: "36px", borderRadius: "10px" }}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10 21h4" /></svg></span><div><strong>Team alert</strong><small>New lead saved</small></div></div>
+<div className="toast side-50" style={{ position: "absolute", right: "24px", bottom: "24px", width: "250px" }}><span className="ico hot" style={{ width: "36px", height: "36px", borderRadius: "10px" }}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10 21h4" /></svg></span><div><strong>Done for you</strong><small>5 new leads added to your sheet</small></div></div>
 </div></div></div></section>
       <FinalCta title={<>Not sure which one?<br />Ask me.</>} />
     </>

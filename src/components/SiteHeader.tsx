@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Ar } from "./ui";
@@ -29,8 +29,29 @@ export default function SiteHeader() {
   const path = usePathname();
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
+  // Fixed header: full width over the hero, then it gathers into one compact box once the hero has scrolled away
+  const [compact, setCompact] = useState(false);
+  useEffect(() => {
+    let raf = 0;
+    const check = () => {
+      raf = 0;
+      const hero = document.querySelector("main section");
+      setCompact(hero ? hero.getBoundingClientRect().bottom < 110 : window.scrollY > window.innerHeight * 0.8);
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(check);
+    };
+    check();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [path]);
   return (
-    <div className={lightPages.includes(path) ? "vhead light" : "vhead night"}>
+    <div className={cn("vhead", lightPages.includes(path) ? "light" : "night", compact && "compact")}>
       <header className="wrap vtop">
         <Link className="vlogo" href="/" onClick={close}>
           fahim<b>.</b>
@@ -51,11 +72,11 @@ export default function SiteHeader() {
           ))}
         </nav>
         <Link
-          className={buttonVariants({ variant: "brand" })}
+          className={buttonVariants({ variant: "brandStill" })}
           href="/contact"
           style={{ minHeight: "44px" }}
         >
-          Book a call
+          Book a free call
           <Ar />
         </Link>
         <Sheet open={open} onOpenChange={setOpen}>
@@ -84,7 +105,7 @@ export default function SiteHeader() {
               href="/contact"
               onClick={close}
             >
-              Book a call
+              Book a free call
               <Ar />
             </Link>
           </SheetContent>

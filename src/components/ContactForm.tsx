@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-const needs = ["A new website", "AI receptionist", "Lead follow-up", "n8n automation", "Not sure yet"];
+const needs = ["A new website", "AI receptionist", "AI agents & automation", "Not sure yet"];
 
 export default function ContactForm() {
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {

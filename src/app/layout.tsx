@@ -7,6 +7,7 @@ import { site } from "../data/site";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import Script from "next/script";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -23,8 +24,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={cn(display.variable, body.variable, mono.variable, "font-sans", geist.variable)}>
+    <html lang="en" suppressHydrationWarning className={cn(display.variable, body.variable, mono.variable, "font-sans", geist.variable)}>
       <body className="v">
+        {/* reload always starts at the top (browser scroll restoring fights the pinned sections); .fx gates the hero entrance */}
+        <Script id="boot" strategy="beforeInteractive">{"history.scrollRestoration='manual';scrollTo(0,0);var d=document.documentElement;if(!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('fx');setTimeout(function(){d.classList.add('hero-go')},3500)}"}</Script>
         <a className="skip" href="#main">Skip to content</a>
         <div id="smooth-wrapper">
           <div id="smooth-content">

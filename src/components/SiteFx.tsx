@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { ensureSmoother, gsap, refreshSoon, isMobile, reducedMotion, ScrollTrigger } from "../lib/gsap";
+import { ensureSmoother, gsap, refreshSoon, isMobile, reducedMotion, ScrollTrigger, snapPts } from "../lib/gsap";
 
 // Shared animations from the mockups (ran on every page): smooth scroll, pinned service cards,
 // count-up numbers, chart lines drawing, section headings rising in. Re-runs on every route change.
@@ -11,10 +11,10 @@ export default function SiteFx() {
   useEffect(() => {
     const reduce = reducedMotion();
     const smoother = ensureSmoother();
-    smoother?.scrollTop(0);
+    smoother?.scrollTo(0, { immediate: true, force: true });
     const ac = new AbortController();
     const ctx = gsap.context(() => {
-      const row = document.querySelector(".xrow");
+      const row = document.querySelector(".xpanels");
       // shortcut: mobile check happens once per page load; resizing across 900px needs a reload
       if (row && !isMobile()) {
         // Card scenes are drawn at 600x300 and scaled to fit the room left in each card.
@@ -29,56 +29,43 @@ export default function SiteFx() {
         ac.signal.addEventListener("abort", () => fit.disconnect());
       }
       if (row && !reduce && !isMobile()) {
-        // Pinned cards: the open card is driven by scroll position (scrub), so fast scrolling
-        // always lands in the right state. Card 1 open -> card 2 open -> card 3 open.
+        // Home "Three ways I help": one full panel per service on a pinned stage, swapped one scroll step at a time
+        // (same idea as "Where I've worked"). Step k is fully shown at progress k/(n-1).
         const cards = gsap.utils.toArray<HTMLElement>(".xc", row);
-        const q = (c: HTMLElement, s: string) => c.querySelector(s);
-        const open = { flexGrow: 4.2, backgroundColor: "#FFFFFF", color: "#141821" };
-        const shut = { flexGrow: 1, backgroundColor: "#101935", color: "#EEF1F8" };
-        row.classList.add("scrub");
-        cards.forEach((c, j) => {
-          gsap.set(c, j ? shut : open);
-          gsap.set(q(c, ".xc-open"), j ? { opacity: 0, y: 16 } : { opacity: 1, y: 0 });
-          gsap.set(q(c, ".xc-closed"), { opacity: j ? 1 : 0 });
-        });
-        const at: number[] = [0.25]; // timeline time where each card is fully open
-        const tl = gsap.timeline({ defaults: { ease: "none" } }).to({}, { duration: 0.5 });
-        for (let j = 1; j < cards.length; j++) {
-          const a = cards[j - 1], b = cards[j], t = tl.duration();
-          tl.to(a, { ...shut, duration: 1 }, t)
-            .to(b, { ...open, duration: 1 }, t)
-            .to(q(a, ".xc-open"), { opacity: 0, y: 16, duration: 0.35 }, t)
-            .to(q(a, ".xc-closed"), { opacity: 1, duration: 0.4 }, t + 0.5)
-            .to(q(b, ".xc-closed"), { opacity: 0, duration: 0.3 }, t)
-            .to(q(b, ".xc-open"), { opacity: 1, y: 0, duration: 0.5 }, t + 0.5)
-            .to({}, { duration: j < cards.length - 1 ? 1 : 0.5 });
-          at.push(t + 1 + (j < cards.length - 1 ? 0.5 : 0.25));
-        }
-        const mark = () => {
-          const t = tl.time();
-          const k = at.reduce((best, v, i) => (Math.abs(v - t) < Math.abs(at[best] - t) ? i : best), 0);
-          cards.forEach((c, j) => c.classList.toggle("on", j === k));
+        const sec = document.getElementById("svc")!;
+        const btns = gsap.utils.toArray<HTMLButtonElement>(".svc-prog button", sec);
+        const n = cards.length;
+        const parts = (c: HTMLElement) => c.querySelectorAll(".xc-open > *");
+        let cur = 0;
+        cards.forEach((c, j) => c.classList.toggle("on", j === 0));
+        const show = (k: number) => {
+          if (k === cur) return;
+          const old = cards[cur];
+          cur = k;
+          btns.forEach((b, j) => b.classList.toggle("on", j === k));
+          gsap.to(parts(old), { opacity: 0, y: -24, duration: 0.25, stagger: 0.02, overwrite: true, onComplete: () => { if (old !== cards[cur]) old.classList.remove("on"); } });
+          cards[k].classList.add("on");
+          // the scene loops on its own clock: restart it so the story always begins at its first frame
+          cards[k].querySelectorAll<HTMLElement>(".scene *").forEach((e) => { e.style.animation = "none"; void e.offsetWidth; e.style.animation = ""; });
+          gsap.fromTo(parts(cards[k]), { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", stagger: 0.08, delay: 0.2, overwrite: true });
         };
-        tl.eventCallback("onUpdate", mark);
-        // Hover/focus previews a card by moving the timeline; the next scroll takes over again.
-        // The cards resize under a resting cursor while scrolling, which fires mouseenter: ignore hover right after a scroll.
-        let preview: gsap.core.Tween | null = null;
-        let lastScroll = 0;
-        const calm = () => performance.now() - lastScroll > 400;
         const st = ScrollTrigger.create({
-          trigger: "#svc", start: "top top", end: () => "+=" + 3 * window.innerHeight, pin: true, scrub: 0.4, animation: tl,
-          onUpdate: () => { lastScroll = performance.now(); preview?.kill(); preview = null; },
+          trigger: sec, start: "top top", end: "+=" + (n - 1) * window.innerHeight, pin: true, ...snapPts([0.5]),
+          onUpdate: (s) => {
+            show(Math.round(s.progress * (n - 1)));
+            btns.forEach((b, j) => { (b.querySelector("em") as HTMLElement).style.width = Math.max(0, Math.min(1, s.progress * (n - 1) - (j - 1))) * 100 + "%"; });
+          },
         });
-        const show = (j: number) => { if (calm()) preview = gsap.to(tl, { time: at[j], duration: 0.6, ease: "power2.out", overwrite: true }); };
-        cards.forEach((c, j) => {
-          c.addEventListener("mouseenter", () => show(j), { signal: ac.signal });
-          c.addEventListener("focus", () => show(j), { signal: ac.signal });
-        });
-        row.addEventListener("mouseleave", () => { if (calm()) preview = gsap.to(tl, { progress: st.progress, duration: 0.6, ease: "power2.out", overwrite: true }); }, { signal: ac.signal });
-        ac.signal.addEventListener("abort", () => row.classList.remove("scrub"));
+        btns.forEach((b, j) => b.addEventListener("click", () => {
+          const y = st.start + (j / (n - 1)) * (st.end - st.start);
+          const sm = ensureSmoother();
+          if (sm) sm.scrollTo(y, { duration: 0.9 }); else scrollTo({ top: y, behavior: "smooth" });
+        }, { signal: ac.signal }));
+        ac.signal.addEventListener("abort", () => cards.forEach((c, j) => c.classList.toggle("on", j === 0)));
       }
       gsap.utils.toArray<HTMLElement>(".count").forEach((el) => {
-        const t = el.textContent ?? "";
+        // keep the real value: a re-run would otherwise read the "0" a cut-off earlier run left behind
+        const t = (el.dataset.v ??= el.textContent ?? "");
         const m = t.match(/[\d.]+/);
         if (!m) return;
         const end = parseFloat(m[0]);
