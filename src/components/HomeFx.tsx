@@ -45,7 +45,7 @@ export default function HomeFx() {
       clearTimeout(cap); ac.abort(); ctx.revert();
       qa(document, "#how").forEach((s) => s.classList.remove("fx")); // may already be hidden here
       document.body.classList.remove("grain");
-      qa(document, ".wipe").forEach((s) => s.classList.remove("wipe"));
+      qa(document, ".wipe").forEach((s) => s.classList.remove("wipe", "wout"));
       qa(document, ".scn").forEach((s) => s.classList.remove("scn"));
       document.querySelector(".wipebg")?.remove();
     };
@@ -81,10 +81,14 @@ function wipeFx() {
     s.classList.add("wipe");
     if (scene(i)) { secs[i - 1].classList.add("scn"); s.classList.add("scn"); } // let held content spill past the section edge
   });
+  // When the backdrop flips dark <-> light, the section above keeps text made for the old colour
+  // (white on cream = invisible). So fade that section out as the colour changes, back in on the way up.
+  // Desktop scene changes already crossfade their content, so they are left alone.
+  const flip = (i: number) => !scene(i) && dot(cols[i]) !== dot(cols[i - 1]);
   secs.forEach((s, i) => i && ScrollTrigger.create({
     trigger: s, start: "top 50%",
-    onEnter: () => fade(cols[i]),
-    onLeaveBack: () => fade(cols[i - 1]),
+    onEnter: () => { fade(cols[i]); if (flip(i)) secs[i - 1].classList.add("wout"); },
+    onLeaveBack: () => { fade(cols[i - 1]); secs[i - 1].classList.remove("wout"); },
   }));
   secs.forEach((s, i) => {
     if (!i) return;
