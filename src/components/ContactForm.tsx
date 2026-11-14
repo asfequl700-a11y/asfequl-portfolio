@@ -1,24 +1,39 @@
 "use client";
 
-import type { FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { toast } from "sonner";
 import { site } from "../data/site";
+import { sendEnquiry } from "../app/contact/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
-const needs = ["A new website", "AI receptionist", "AI agents & automation", "Not sure yet"];
-
 export default function ContactForm() {
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const [state, setState] = useState<"idle" | "sending" | "sent">("idle");
+
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const d = Object.fromEntries(new FormData(e.currentTarget)) as Record<string, string>;
-    // shortcut: opens the visitor's email app instead of sending from a server; upgrade to Resend if visitors without a mail app matter.
-    const body = `Name: ${d.name}\nEmail: ${d.email}\nNeed: ${d.need}\n\n${d.message}`;
-    window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(`Website enquiry: ${d.need}`)}&body=${encodeURIComponent(body)}`;
-    toast("Your email app should open now.", { description: `If it doesn't, email me at ${site.email}`, duration: 10000 });
+    setState("sending");
+    try {
+      const res = await sendEnquiry(new FormData(e.currentTarget));
+      if (res.ok) return setState("sent");
+      toast.error(res.error, { description: `You can also email me at ${site.email}` });
+    } catch {
+      toast.error("Couldn't send right now.", { description: `Please email me at ${site.email}` });
+    }
+    setState("idle");
   };
+
+  if (state === "sent") {
+    return (
+      <div className="vform vf-done" role="status">
+        <b>Message sent.</b>
+        <span>Thanks. I&apos;ll read it and reply to your email personally.</span>
+        <button type="button" className="vf-again" onClick={() => setState("idle")}>Send another message</button>
+      </div>
+    );
+  }
 
   return (
     <form className="vform" onSubmit={onSubmit}>
@@ -27,22 +42,15 @@ export default function ContactForm() {
         <span>Tell me a little about your business.</span>
       </div>
       <div className="vf-row">
-        <div><Label htmlFor="n">Your name</Label><Input id="n" name="name" placeholder="Jane Smith" required autoComplete="name" /></div>
-        <div><Label htmlFor="e">Email</Label><Input id="e" name="email" type="email" placeholder="jane@business.com" required autoComplete="email" /></div>
+        <div><Label htmlFor="n">Your name</Label><Input id="n" name="name" placeholder="Jane Smith" required maxLength={100} autoComplete="name" /></div>
+        <div><Label htmlFor="e">Email</Label><Input id="e" name="email" type="email" placeholder="jane@business.com" required maxLength={200} autoComplete="email" /></div>
       </div>
-      <fieldset className="vf-need">
-        <legend>What do you need?</legend>
-        <div>
-          {needs.map((n, i) => (
-            <label key={n} className="vf-chip">
-              <input type="radio" name="need" value={n} defaultChecked={i === 0} />
-              <span>{n}</span>
-            </label>
-          ))}
-        </div>
-      </fieldset>
-      <div><Label htmlFor="m">Tell me a bit more</Label><Textarea id="m" name="message" rows={3} placeholder="I run a plumbing business and miss calls when I'm on a job." required /></div>
-      <Button variant="brand" type="submit" className="vf-send">Send message<span aria-hidden="true">&rarr;</span></Button>
+      {/* Spam trap: hidden from people, bots fill it in. */}
+      <div className="vf-trap" aria-hidden="true"><label htmlFor="c">Company</label><input id="c" name="company" tabIndex={-1} autoComplete="off" /></div>
+      <div><Label htmlFor="m">Your message</Label><Textarea id="m" name="message" placeholder="e.g. I run a plumbing business and miss calls when I'm on a job." required minLength={5} maxLength={5000} /></div>
+      <Button variant="brand" type="submit" className="vf-send" disabled={state === "sending"}>
+        {state === "sending" ? "Sending…" : <>Send message<span aria-hidden="true">&rarr;</span></>}
+      </Button>
       <p className="vf-note">I reply personally within 48 hours.</p>
     </form>
   );
