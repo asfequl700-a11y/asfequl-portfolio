@@ -52,7 +52,7 @@ export default function HomePage() {
 <div className="ft"><div className="you"><span>You: <b>0 calls answered, 0 minutes spent.</b></span></div></div>
 </div>
 </section>
-<section className="sec fs desktop-only" id="svc"><div className="wrap"><div style={{ display: "flex", justifyContent: "space-between", alignItems: "end", gap: "24px", marginBottom: "28px" }}><div><span className="kick">What I do</span><h2>Three ways I help.</h2></div><Link className={buttonVariants({ variant: "brandGhost" })} href="/services">All services<Ar /></Link></div><div className="xpanels">
+<section className="sec fs" id="svc"><div className="wrap"><div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "end", gap: "24px", marginBottom: "28px" }}><div><span className="kick">What I do</span><h2>Three ways I help.</h2></div><Link className={buttonVariants({ variant: "brandGhost" })} href="/services">All services<Ar /></Link></div><div className="xpanels">
 <article className="xc on" tabIndex={0}>
  <div className="xc-closed"><span className="xc-num">01</span><span className="xc-name">Websites</span></div>
  <div className="xc-open">
@@ -141,7 +141,6 @@ export default function HomePage() {
   
  </div>
 </article></div><div className="svc-prog"><button type="button" data-go={0} className="on"><i><em></em></i>Websites</button><button type="button" data-go={1} className=""><i><em></em></i>AI receptionist</button><button type="button" data-go={2} className=""><i><em></em></i>AI agents &amp; automation</button></div></div></section>
-<section className="night fs mobile-only" style={{ padding: "56px 0" }}><div className="wrap" style={{ padding: "0 20px", display: "flex", flexDirection: "column", gap: "12px" }}><span className="kick">What I do</span><Link className={buttonVariants({ variant: "brand" })} style={{ marginTop: "24px", justifyContent: "center" }} href="/contact">Book a free call<Ar /></Link></div></section>
 <WorkPanels />
 <Testimonials full />
 <section className="sec fs"><div className="wrap"><span className="kick">My AI agents</span><h2>Little helpers I built,<br />each with one job.</h2><ol className="agents"><li className="agr"><span className="agn">01</span><h3>Scout</h3><p className="job">Finds YouTube channels, scores them with AI, saves the good ones.</p><span className="agt">n8n · YouTube API · Gemini</span></li><li className="agr"><span className="agn">02</span><h3>Producer</h3><p className="job">Researches a topic and writes a full video package in Google Docs.</p><span className="agt">n8n · Gemini · Docs</span></li><li className="agr"><span className="agn">03</span><h3>Reader</h3><p className="job">Reads new articles, keeps the ones that matter, sends a summary.</p><span className="agt">n8n · RSS · Discord</span></li><li className="agr"><span className="agn">04</span><h3>Closer</h3><p className="job">Writes a personal email to each lead and checks for replies.</p><span className="agt">n8n · Gmail · Sheets</span></li></ol><Link className={buttonVariants({ variant: "brandGhost" })} style={{ marginTop: "32px" }} href="/projects">See them in action<Ar /></Link></div></section>

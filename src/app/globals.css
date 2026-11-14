@@ -588,6 +588,7 @@ a{color:inherit}
   .giant{font-size:22vw}
   .vform{padding:22px}
 }
+@media (max-width:600px){.steps{grid-template-columns:1fr}}
 
 @theme inline {--font-heading:var(--f-display),sans-serif;--font-sans:var(--f-body),system-ui,sans-serif;--font-mono:var(--f-mono),ui-monospace,monospace;--color-sidebar-ring:var(--sidebar-ring);--color-sidebar-border:var(--sidebar-border);--color-sidebar-accent-foreground:var(--sidebar-accent-foreground);--color-sidebar-accent:var(--sidebar-accent);--color-sidebar-primary-foreground:var(--sidebar-primary-foreground);--color-sidebar-primary:var(--sidebar-primary);--color-sidebar-foreground:var(--sidebar-foreground);--color-sidebar:var(--sidebar);--color-chart-5:var(--chart-5);--color-chart-4:var(--chart-4);--color-chart-3:var(--chart-3);--color-chart-2:var(--chart-2);--color-chart-1:var(--chart-1);--color-ring:var(--ring);--color-input:var(--input);--color-border:var(--border);--color-destructive:var(--destructive);--color-accent-foreground:var(--accent-foreground);--color-accent:var(--accent);--color-muted-foreground:var(--muted-foreground);--color-muted:var(--muted);--color-secondary-foreground:var(--secondary-foreground);--color-secondary:var(--secondary);--color-primary-foreground:var(--primary-foreground);--color-primary:var(--primary);--color-popover-foreground:var(--popover-foreground);--color-popover:var(--popover);--color-card-foreground:var(--card-foreground);--color-card:var(--card);--color-foreground:var(--foreground);--color-background:var(--background);--radius-sm:calc(var(--radius) * 0.6);--radius-md:calc(var(--radius) * 0.8);--radius-lg:var(--radius);--radius-xl:calc(var(--radius) * 1.4);--radius-2xl:calc(var(--radius) * 1.8);--radius-3xl:calc(var(--radius) * 2.2);--radius-4xl:calc(var(--radius) * 2.6);}
 
@@ -689,6 +690,8 @@ body:has(.wipebg) .vhead{background:transparent}
 @keyframes hglow{from{opacity:.65;transform:translateX(-50%) scale(.94)}to{opacity:1;transform:translateX(-50%) scale(1.04)}}
 @media (prefers-reduced-motion:reduce){.hglow::before{animation:none}}
 @media (min-width:901px){.hero .pcard{left:-250px;bottom:-30px}}
+/* small laptops / landscape tablets: smaller hero so the call card sits on the photo, not over the headline */
+@media (min-width:901px) and (max-width:1180px){.hero h1{font-size:clamp(56px,6.4vw,76px)}.hero .arch{width:300px;height:400px}.hero .pcard{left:-60px;width:250px}}
 /* Home background texture: very soft dots, drawn on the colour backdrop so they sit behind all content (replaces the grain) */
 body.grain .wipebg{background-image:radial-gradient(var(--dot,rgba(128,128,128,.1)) 1.2px,transparent 2px);background-size:24px 24px}
 body.grain::after{display:none}
@@ -749,6 +752,17 @@ html.lenis,html.lenis body{height:auto}
 .svc-prog button:first-child i em{width:100%}
 .svc-prog button.on{color:#101935}
 @media (prefers-reduced-motion:reduce){.xpanels{height:auto;display:grid;gap:16px}.xpanels .xc{position:relative;visibility:visible;min-height:560px}.svc-prog{display:none}}
+/* phones/tablets: the three service panels stacked as plain cards (no pinned stage); after the rules above so it wins */
+@media (max-width:900px){
+  .v #svc.fs{padding:72px 0}
+  .xpanels{height:auto;display:grid;gap:16px}
+  .xpanels .xc{position:relative;visibility:visible;min-height:0}
+  .xpanels .xc-open{position:relative;padding:28px 22px;display:flex;flex-direction:column;gap:12px}
+  .xpanels .xc-open p{font-size:17px}
+  .xpanels .xc-scene{flex:none;order:9;margin:8px 0 0}
+  .xpanels .xc-scene>.scene{position:relative;left:auto;top:auto;width:auto;transform:none}
+  .svc-prog{display:none}
+}
 
 /* Home hero entrance: hidden until HomeFx adds .hero-go (after the heavy setup), then rises in one by one.
    .fx is added by an inline script in layout only when motion is allowed; a 3.5s failsafe adds .hero-go if JS stalls. */
