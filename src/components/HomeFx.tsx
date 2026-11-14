@@ -169,6 +169,7 @@ function agentFx(mob: boolean) {
     tl.to(q(s, ".cd"), { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, at + 0.1);
   });
   tl.to(q(g, ".ft"), { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, "+=.2");
+  tl.timeScale(1.7);
   st.forEach((s) => s.classList.remove("on"));
   if (!mob) gsap.set(g, { padding: "var(--hsafe) 0 48px" });
   // Plays by itself once the section is mostly on screen (no pin, no scroll-driven steps);

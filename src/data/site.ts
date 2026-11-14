@@ -30,7 +30,7 @@ export type Company = {
 
 export const companies: Company[] = [
   {
-    name: "Ryne AI", proof: { src: "/proof/ryne-proof.png", alt: "Google Search Console for ryne.ai: 518K total clicks, 7.21M impressions, 7.2% average click rate" },
+    name: "ryne.ai", proof: { src: "/proof/ryne-proof.png", alt: "Google Search Console for ryne.ai: 518K total clicks, 7.21M impressions, 7.2% average click rate" },
     logo: "/logo-ryne.png",
     url: "https://ryne.ai",
     host: "ryne.ai",
@@ -46,7 +46,7 @@ export const companies: Company[] = [
     worth: { value: "7.2M", label: "times shown in Google search" },
   },
   {
-    name: "Humaniser", proof: { src: "/proof/humaniser-proof.png", alt: "Google Search Console for humaniser.com, Oct 2025 to Mar 2026: 215K total clicks, 2.13M impressions, 10.1% average click rate" },
+    name: "humaniser.com", proof: { src: "/proof/humaniser-proof.png", alt: "Google Search Console for humaniser.com, Oct 2025 to Mar 2026: 215K total clicks, 2.13M impressions, 10.1% average click rate" },
     logo: "/logo-humaniser.png",
     url: "https://humaniser.com",
     host: "humaniser.com",
@@ -62,7 +62,7 @@ export const companies: Company[] = [
     worth: { value: "3K", label: "clicks a day by Mar 2026, from 0 in Oct 2025" },
   },
   {
-    name: "Reilaa", proof: { src: "/proof/reilaa-proof.png", alt: "Google Search Console for reilaa.com, Aug 2025 to Jan 2026: 142K total clicks, 6.46M impressions, average position 9.5" },
+    name: "reilaa.com", proof: { src: "/proof/reilaa-proof.png", alt: "Google Search Console for reilaa.com, Aug 2025 to Jan 2026: 142K total clicks, 6.46M impressions, average position 9.5" },
     logo: "/logo-reilaa.png",
     darkLogo: true,
     url: "https://reilaa.com",
@@ -125,7 +125,7 @@ export const sparkPoints = (ys: number[], w: number) => ys.map((y, i) => `${+((i
 export type Testimonial = { quote: string; name: string; title: string; photo: string; company?: string };
 
 export const testimonials: Testimonial[] = [
-  { name: "Rajin Syed", title: "Founder & CEO", company: "Ryne AI, Humaniser & Reilaa", photo: "/testimonials/rajin.png", quote: "Fahim has grown our Google traffic month after month. He's fast, he owns his work, and he keeps finding new ways to bring people to the site." },
-  { name: "Arefin Reza", title: "COO & Co-Founder", company: "Ryne AI, Humaniser & Reilaa", photo: "/testimonials/arefin.png", quote: "Fahim is reliable and easy to work with. He reports clearly, hits his deadlines, and the results show in our search numbers." },
-  { name: "George", title: "Marketing Manager", company: "Ryne AI", photo: "/testimonials/george.jpg", quote: "Working with Fahim day to day is simple. He communicates well, moves fast, and always explains what he changed and why." },
+  { name: "Rajin Syed", title: "Founder & CEO", company: "ryne.ai, humaniser.com & reilaa.com", photo: "/testimonials/rajin.png", quote: "Fahim has grown our Google traffic month after month. He's fast, he owns his work, and he keeps finding new ways to bring people to the site." },
+  { name: "Arefin Reza", title: "COO & Co-Founder", company: "ryne.ai, humaniser.com & reilaa.com", photo: "/testimonials/arefin.png", quote: "Fahim is reliable and easy to work with. He reports clearly, hits his deadlines, and the results show in our search numbers." },
+  { name: "George", title: "Marketing Manager", company: "ryne.ai", photo: "/testimonials/george.jpg", quote: "Working with Fahim day to day is simple. He communicates well, moves fast, and always explains what he changed and why." },
 ];

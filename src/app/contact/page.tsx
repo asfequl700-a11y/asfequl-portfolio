@@ -14,7 +14,7 @@ export default function ContactPage() {
   return (
     <div className="page">
       <SiteFx />
-<section className="night ctc"><div className="wrap"><div className="stack" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "56px", alignItems: "center" }}><div style={{ display: "flex", flexDirection: "column", gap: "22px" }}><h1>Let&apos;s talk about<br />your business.</h1><p className="muted">Tell me what you do and where you lose customers. No pitch, just a plan.</p><ContactReach /></div><div className="ctc-card"><ContactForm /></div></div></div></section>
+<section className="night ctc"><div className="wrap"><div className="stack" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "56px", alignItems: "center" }}><div className="ctc-intro" style={{ display: "flex", flexDirection: "column", gap: "22px" }}><h1>Let&apos;s talk about<br />your business.</h1><p className="muted">Tell me what you do and where you lose customers. No pitch, just a plan.</p><ContactReach /></div><div className="ctc-card"><ContactForm /></div></div></div></section>
     </div>
   );
 }

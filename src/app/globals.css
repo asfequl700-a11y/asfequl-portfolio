@@ -348,6 +348,7 @@ a.lnk:hover .ar{background:#FF6B1A;color:#101935;box-shadow:none}
 #work .wp-role{margin:0;color:#8E97B3;font-size:16px}
 #work .wp-logo{width:96px;height:96px;border-radius:24px;background:#fff;object-fit:contain;flex:none}
 #work .wp-logo.dark{background:#0B1024;border:1px solid rgba(238,241,248,.25);padding:10px;box-sizing:border-box}
+img[alt="ryne.ai logo"]{border:2px solid #fff;box-sizing:border-box}
 #work .wp-grid{flex:1;display:grid;grid-template-columns:1.6fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:16px;min-height:380px}
 #work .wp-box{background:#18223F;border:1px solid rgba(238,241,248,.1);border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:8px;color:#EEF1F8;min-width:0}
 #work .wp-box b{font:800 44px/1 var(--f-display),sans-serif;letter-spacing:-.03em}
@@ -686,10 +687,6 @@ body:has(.wipebg) .vhead{background:transparent}
 .fs .giant{font-size:clamp(80px,17vh,168px);padding:clamp(8px,2vh,40px) 0 0}
 }
 /* Hero: soft orange glow rising from the bottom middle (replaces the FAHIM outline text); chat card moved off the face */
-.hglow{position:absolute;inset:0;pointer-events:none;z-index:0}
-.hglow::before{content:"";position:absolute;left:50%;bottom:-38vh;width:110vw;height:80vh;transform:translateX(-50%);background:radial-gradient(closest-side,rgba(255,107,26,.17),rgba(255,107,26,.05) 55%,transparent);pointer-events:none;z-index:0;animation:hglow 7s ease-in-out infinite alternate}
-@keyframes hglow{from{opacity:.65;transform:translateX(-50%) scale(.94)}to{opacity:1;transform:translateX(-50%) scale(1.04)}}
-@media (prefers-reduced-motion:reduce){.hglow::before{animation:none}}
 @media (min-width:901px){.hero .pcard{left:-250px;bottom:-30px}}
 /* small laptops / landscape tablets: smaller hero so the call card sits on the photo, not over the headline */
 @media (min-width:901px) and (max-width:1180px){.hero h1{font-size:clamp(56px,6.4vw,76px)}.hero .arch{width:300px;height:auto}.hero .pcard{left:-60px;width:250px}}
@@ -741,13 +738,13 @@ html.lenis,html.lenis body{height:auto}
 .xpanels .xc{position:absolute;inset:0;flex:none;visibility:hidden;cursor:default;transition:none;background:#fff;color:#141821}
 .xpanels .xc.on{visibility:visible}
 .xpanels .xc-closed{display:none}
-.xpanels .xc-open{width:auto;opacity:1;transform:none;transition:none;pointer-events:auto;padding:44px 56px;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);grid-template-rows:1fr auto auto auto auto 1fr;column-gap:48px;row-gap:16px}
+.xpanels .xc-open{width:auto;opacity:1;transform:none;transition:none;pointer-events:auto;padding:44px 56px;display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);grid-template-rows:1fr auto auto auto auto 1fr;column-gap:40px;row-gap:16px}
 .xpanels .xc-open>*{grid-column:1}
 .xpanels .xc-open>.kick{grid-row:2}.xpanels .xc-open>h3{grid-row:3}.xpanels .xc-open>p{grid-row:4}.xpanels .xc-open>.list{grid-row:5}
 .xpanels .xc-open>.xc-scene{grid-column:2;grid-row:1/7;margin:0}
 .xpanels .xc-open h3{font-size:clamp(34px,4.4vw,56px)}
 .xpanels .xc-open p{font-size:19px}
-.xpanels .xc-open .list{display:block}
+.xpanels .xc-open .list{display:flex;flex-direction:column;flex-wrap:nowrap;gap:10px}
 .svc-prog{display:flex;gap:8px;margin-top:22px;max-width:560px}
 .svc-prog button{flex:1;border:0;background:none;padding:0;color:#7A8299;font:600 13px var(--f-body),sans-serif;text-align:left;cursor:pointer}
 .svc-prog button i{display:block;height:4px;border-radius:4px;background:rgba(16,25,53,.14);margin-bottom:8px;overflow:hidden}
@@ -868,7 +865,6 @@ body:has(.wipebg) .vhead{background:transparent}
 /* phones: the rotating hero headline has a fixed 2-line box, so every line must fit on one row (widest is "Automations that" ~7.7em) */
 @media (max-width:900px){.v .hero h1{font-size:min(52px,calc((100vw - 40px) / 8))!important}.hero h1 .rot2>span{white-space:nowrap}}
 /* phones/tablets: the orange hero glow sits behind the call card and gets cut off with a hard edge when the page fades to cream, so hide it */
-@media (max-width:900px){.hglow{display:none}}
 /* phones/tablets: the call card's big dark shadow ran past the hero's bottom and got clipped (overflow:hidden),
    leaving a dirty grey band with a hard edge once the page turns cream. Smaller shadow + room for it. */
 @media (max-width:900px){.hero{padding-bottom:64px}.hero .pcard{box-shadow:0 10px 28px rgba(4,8,24,.22)}}
@@ -891,4 +887,85 @@ body:has(.wipebg) .vhead{background:transparent}
   .wp-proof .proof:hover,.wp-proof .proof:focus-visible{transform:none}
   .wp-proof .proof img{width:100%;height:100%;object-fit:cover;object-position:top left;border-radius:0}
   .wp-proof .proof span{position:absolute;left:8px;bottom:8px;margin:0;padding:4px 10px;border-radius:999px;background:rgba(11,20,48,.85);color:#EEF1F8;font-size:12px}
+}
+/* hero: instant-camera photo (polaroid) taped to the wall, a little crooked */
+.hero .arch{overflow:visible;aspect-ratio:5/6;border-radius:3px 2px 4px 2px;rotate:3deg;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .3 0 0 0 0 .22 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),linear-gradient(160deg,#FBF9F3 0%,#F1ECE0 55%,#E9E2D2 100%);box-shadow:0 1px 1px rgba(0,0,0,.25),2px 18px 30px -6px rgba(4,8,24,.6),14px 34px 60px -20px rgba(4,8,24,.55)}
+.hero .arch img{inset:5% 5.5% 20% 5.5%!important;width:89%!important;height:75%!important;border-radius:1px;filter:contrast(1.04) saturate(.9) sepia(.08);box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}
+.hero .arch::after{content:"";position:absolute;inset:5% 5.5% 20% 5.5%;box-shadow:inset 0 0 18px rgba(0,0,0,.35);pointer-events:none;z-index:1}
+.hero .arch::before{content:"";position:absolute;top:-14px;left:50%;width:110px;height:28px;transform:translateX(-50%) rotate(-4deg);background:rgba(236,226,200,.72);box-shadow:0 1px 2px rgba(0,0,0,.2);z-index:2}
+@media (min-width:1181px){.hgrid{grid-template-columns:1.2fr .8fr}.hero h1{font-size:88px}.hero .arch{width:400px}.hero .muted{font-size:23px!important}}
+@media (min-width:901px){.hgrid{padding-top:110px}.hero{padding-bottom:110px}}
+/* hero doodles: white sketch plane + banner, sky bits, boat (HeroDoodles.tsx) */
+.hd{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.hd-bit{position:absolute;fill:none;stroke:#EEF1F8;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.45;filter:url(#hd-sk)}
+.hd-ink{fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.hd-flight{position:absolute;left:0;top:0;width:100%;height:auto;overflow:visible;opacity:.9}
+.hd-mb{display:none}
+.hd-prop{transform-box:fill-box;transform-origin:center;animation:hdprop .18s linear infinite}
+@keyframes hdprop{50%{transform:scaleY(.25)}}
+.hd-bit.tw{animation:hdtw 3.2s ease-in-out infinite}
+.hd-bit.dr{animation:hddr 14s ease-in-out infinite alternate}
+.hd-bit.d2{animation-delay:-1.1s}.hd-bit.d3{animation-delay:-2.2s}
+@keyframes hdtw{50%{opacity:.12;transform:scale(.7)}}
+@keyframes hddr{to{transform:translateX(40px)}}
+.hd-sea{position:absolute;left:0;right:0;bottom:0;height:80px}
+.hd-wave{position:absolute;left:0;right:0;bottom:30px;height:16px;opacity:.5;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='16'%3E%3Cpath d='M0 8 Q20 1 40 8 T80 8' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x 0 0/80px 16px;animation:hdwave 5s linear infinite}
+.hd-wave.w2{bottom:12px;opacity:.25;animation-duration:8s;animation-direction:reverse}
+@keyframes hdwave{to{background-position-x:80px}}
+.hd-boat{position:absolute;bottom:34px;left:0;width:84px;animation:hdsail 45s linear infinite}
+.hd-boat svg{display:block;width:100%;animation:hdbob 3s ease-in-out infinite alternate;transform-origin:50% 90%}
+@keyframes hdsail{from{transform:translateX(-120px)}to{transform:translateX(100vw)}}
+@keyframes hdbob{from{transform:rotate(-4deg) translateY(0)}to{transform:rotate(4deg) translateY(3px)}}
+@media (max-width:900px){
+  .hd-dk,.hd-bit.dk{display:none}.hd-mb{display:block}
+  .hero .hgrid{padding-top:150px}.hero{padding-bottom:110px}
+  .hero .muted{font-size:19px!important}
+  .hero .arch{width:86%;margin:0 auto;rotate:2.2deg}
+  .hd-boat{width:64px}
+}
+@media (prefers-reduced-motion:reduce){.hd-flight{display:none}}
+
+/* polaroid signature strip (Home hero) */
+.hero .arch{container-type:inline-size}
+.pol-sign{position:absolute;left:5.5%;right:5.5%;top:80%;bottom:0;z-index:2;display:flex;align-items:center;justify-content:center;gap:4cqw;pointer-events:none}
+.pol-sig{font-size:15cqw;line-height:1;color:#1d2a5c;transform:rotate(-4deg) translateY(-1cqw);white-space:nowrap}
+.pol-note{display:flex;align-items:center;gap:1cqw;font-size:6cqw;line-height:1;color:#5a5348;transform:rotate(-3deg) translateY(1.5cqw);white-space:nowrap}
+.pol-note svg{width:11cqw;height:auto;transform:translateY(-2cqw)}
+
+/* subtitle rotator: 8 trades, last span repeats the first for a seamless loop */
+.rot8 span{animation:rot8 20s infinite}
+.rot8 span{white-space:nowrap}
+@keyframes rot8{0%,10.5%{transform:translateY(calc(-0 * var(--rh)))}12.5%,23%{transform:translateY(calc(-1 * var(--rh)))}25%,35.5%{transform:translateY(calc(-2 * var(--rh)))}37.5%,48%{transform:translateY(calc(-3 * var(--rh)))}50%,60.5%{transform:translateY(calc(-4 * var(--rh)))}62.5%,73%{transform:translateY(calc(-5 * var(--rh)))}75%,85.5%{transform:translateY(calc(-6 * var(--rh)))}87.5%,98%{transform:translateY(calc(-7 * var(--rh)))}100%{transform:translateY(calc(-8 * var(--rh)))}}
+@media (prefers-reduced-motion:reduce){.rot8 span{animation:none}}
+
+/* long site names (humaniser.com) must fit next to the logo on phones */
+#work .wp-head>:first-child{min-width:0}#work .wp-logo{flex-shrink:0}
+@media (max-width:900px){#work .wp-name{font-size:min(44px,9vw);overflow-wrap:anywhere}}
+
+/* How we'd work, plain list (mobile/tablet): sketch beside each step */
+#how .step .stx{display:flex;flex-direction:column;gap:10px;min-width:0}
+#how .steps .hwart{width:140px;margin-top:8px}
+@media (max-width:900px){
+  #how .step{flex-direction:row;align-items:center;gap:16px}
+  #how .step .stx{flex:1}
+  #how .steps .hwart{width:112px;flex:none;margin:0}
+}
+@media (max-width:600px){
+  #how .step{padding-top:28px}
+  #how .step h3{font-size:26px}
+  #how .step ul{font-size:15px;gap:6px;padding-left:16px}
+  #how .steps .hwart{width:96px}
+}
+
+/* no blue tap flash on phones (keyboard focus rings stay orange) */
+html{-webkit-tap-highlight-color:transparent}
+/* stop casual text copying; form fields stay usable */
+body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+input,textarea,select,[contenteditable=true]{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
+
+/* Contact, mobile/tablet: form first, then "Or reach me directly" */
+@media (max-width:900px){
+  .ctc-intro{display:contents!important}
+  .ctc .ctc-card{order:1}
+  .ctc .ctc-alt{order:2;margin-top:0}
 }

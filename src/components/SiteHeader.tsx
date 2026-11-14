@@ -38,6 +38,8 @@ export default function SiteHeader() {
     let raf = 0;
     const check = () => {
       raf = 0;
+      // phones/tablets: gather into the compact box on the very first scroll
+      if (window.matchMedia("(max-width: 900px)").matches) return setCompact(window.scrollY > 8);
       const hero = vis("main section");
       // half-screen: the same moment the home backdrop fades to the next section's colour, so the
       // (transparent, light-text) full bar never sits on a cream background
