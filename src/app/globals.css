@@ -866,3 +866,5 @@ body:has(.wipebg) .vhead{background:transparent}
 }
 /* phones: the rotating hero headline has a fixed 2-line box, so every line must fit on one row (widest is "Automations that" ~7.7em) */
 @media (max-width:900px){.v .hero h1{font-size:min(52px,calc((100vw - 40px) / 8))!important}.hero h1 .rot2>span{white-space:nowrap}}
+/* phones/tablets: the orange hero glow sits behind the call card and gets cut off with a hard edge when the page fades to cream, so hide it */
+@media (max-width:900px){.hglow{display:none}}
