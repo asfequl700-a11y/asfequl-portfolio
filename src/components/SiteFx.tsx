@@ -13,6 +13,27 @@ export default function SiteFx() {
     const smoother = ensureSmoother();
     smoother?.scrollTo(0, { immediate: true, force: true });
     const ac = new AbortController();
+    // Demo scenes (website builds, AI answers a call, workflow runs): their CSS loops are 10s and run from page load,
+    // so you often landed mid-loop or on a blank start. Play them 2x faster and restart each one from the top
+    // when it comes into view or its service card opens.
+    const scenes = [...document.querySelectorAll<HTMLElement>(".scene")];
+    const loops = (sc: HTMLElement) => sc.getAnimations({ subtree: true })
+      .filter((a) => a instanceof CSSAnimation && Number(a.effect?.getTiming().duration ?? 0) >= 6000);
+    // speed is set here, not once at load: the loops don't exist yet while the loader hides the page
+    const restart = (sc: HTMLElement) => loops(sc).forEach((a) => { a.playbackRate = 2; a.currentTime = 0; a.play(); });
+    if (!reduce) {
+      const seen = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) restart(e.target as HTMLElement); }), { threshold: 0.4 });
+      scenes.forEach((sc) => seen.observe(sc));
+      const opened = new MutationObserver((ms) => ms.forEach((m) => {
+        const c = m.target as HTMLElement;
+        if (c.classList.contains("on") && !(m.oldValue ?? "").split(" ").includes("on")) c.querySelectorAll<HTMLElement>(".scene").forEach(restart);
+      }));
+      document.querySelectorAll(".xc").forEach((c) => {
+        opened.observe(c, { attributes: true, attributeFilter: ["class"], attributeOldValue: true });
+        c.addEventListener("mouseenter", () => c.querySelectorAll<HTMLElement>(".scene").forEach(restart), { signal: ac.signal });
+      });
+      ac.signal.addEventListener("abort", () => { seen.disconnect(); opened.disconnect(); });
+    }
     const ctx = gsap.context(() => {
       const row = document.querySelector(".xpanels");
       // shortcut: mobile check happens once per page load; resizing across 900px needs a reload
@@ -67,7 +88,7 @@ export default function SiteFx() {
         // keep the real value: a re-run would otherwise read the "0" a cut-off earlier run left behind
         const t = (el.dataset.v ??= el.textContent ?? "");
         const m = t.match(/[\d.]+/);
-        if (!m) return;
+        if (!m || reduce) return;
         const end = parseFloat(m[0]);
         const o = { v: 0 };
         gsap.to(o, {

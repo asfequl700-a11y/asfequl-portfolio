@@ -15,7 +15,7 @@ export default function WorkPage() {
   return (
     <>
       <SiteFx />
-<section className="night"><div className="wrap"><div className="phero"><span className="kick">Work</span><h1>Three live sites.<br />Real people, real traffic.</h1><p className="lead">I&apos;ve worked on growth and day-to-day management for these websites. Here&apos;s what I did and what changed.</p></div></div></section><WorkList /><Testimonials />
+<section className="night"><div className="wrap"><div className="phero"><span className="kick">Work</span><h1>Three live sites.<br />Real people, real traffic.</h1><p className="lead">I&apos;ve worked on growth and day-to-day management for these websites. Here&apos;s how their Google traffic grew while I worked on them.</p></div></div></section><WorkList /><Testimonials />
       <FinalCta title={<>Want this for<br />your site?</>} />
     </>
   );

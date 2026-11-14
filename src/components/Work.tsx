@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Ar, Spark } from "./ui";
 import { companies } from "../data/site";
+import Proof from "./Proof";
 import { buttonVariants } from "@/components/ui/button";
 
 
@@ -24,6 +25,7 @@ export function WorkPanels() {
               <div className="wp-box wp-main">
                 <small>{c.main.label}</small>
                 <div className="wp-big"><span className="pcount">{c.main.value}</span></div>
+                <Proof shot={c.proof} site={c.name} />
                 <div className="wp-chart"><Spark ys={c.chart} w={600} className="wpspark" /></div>
                 <small className="wp-axis">{c.span}</small>
               </div>
@@ -43,7 +45,7 @@ export function WorkPanels() {
               <button key={c.name} type="button" data-go={i} className={i === 0 ? "on" : undefined}><i><em></em></i>{c.name}</button>
             ))}
           </div>
-          <span>Source: Ahrefs, Google search visitors.</span>
+          <span>Source: Google Search Console. Click “See proof” for the screenshot.</span>
           <Link className={buttonVariants({ variant: "brandGhost" })} href="/work" style={{ color: "#EEF1F8" }}>See all my work<Ar /></Link>
         </div>
       </div>
@@ -72,6 +74,7 @@ export function WorkList() {
                 ))}
               </div>
               <div className="wf-chart">
+                <Proof shot={c.proof} site={c.name} />
                 <div className="wf-axis"><span>{c.span.split(" → ")[0]}</span><span>{c.span.split(" → ")[1]}</span></div>
                 <Spark ys={c.chart} w={560} className="wspark tall" />
               </div>

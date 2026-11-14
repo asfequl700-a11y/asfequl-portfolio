@@ -36,7 +36,9 @@ export default function SiteHeader() {
     const check = () => {
       raf = 0;
       const hero = document.querySelector("main section");
-      setCompact(hero ? hero.getBoundingClientRect().bottom < 110 : window.scrollY > window.innerHeight * 0.8);
+      // half-screen: the same moment the home backdrop fades to the next section's colour, so the
+      // (transparent, light-text) full bar never sits on a cream background
+      setCompact(hero ? hero.getBoundingClientRect().bottom < window.innerHeight * 0.5 : window.scrollY > window.innerHeight * 0.5);
     };
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(check);

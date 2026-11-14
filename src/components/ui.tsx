@@ -19,7 +19,8 @@ export function Spark({ ys, w, className }: { ys: number[]; w: number; className
   const last = ys[ys.length - 1];
   return (
     <svg className={className} viewBox={`0 0 ${w} 200`} preserveAspectRatio="none" aria-hidden="true">
-      <path className="area" d={`${line} L${w} 200 L0 200 Z`} />
+      <defs><linearGradient id="sparkfade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#FF6B1A" stopOpacity=".28" /><stop offset="1" stopColor="#FF6B1A" stopOpacity="0" /></linearGradient></defs>
+      <path className="area" d={`${line} L${w} 200 L0 200 Z`} fill="url(#sparkfade)" />
       <path className="line" pathLength={1} d={line} />
       <circle className="tip" cx={w} cy={last} r="4" />
     </svg>

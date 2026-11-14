@@ -58,9 +58,12 @@ function wipeFx() {
   // Batched on purpose: all class writes, then all trigger measuring, then the timelines (they measure
   // later, in one go). Mixing writes and measuring per section forced a full re-layout each time: ~0.2s stall on load.
   const desk = !isMobile();
+  // the scene change moves content by a full screen, so only use it between two full-screen sections
+  const full = secs.map((s) => s.offsetHeight >= window.innerHeight * 0.85);
+  const scene = (i: number) => desk && i > 0 && full[i] && full[i - 1];
   secs.forEach((s, i) => {
     s.classList.add("wipe");
-    if (desk && i) { secs[i - 1].classList.add("scn"); s.classList.add("scn"); } // let held content spill past the section edge
+    if (scene(i)) { secs[i - 1].classList.add("scn"); s.classList.add("scn"); } // let held content spill past the section edge
   });
   secs.forEach((s, i) => i && ScrollTrigger.create({
     trigger: s, start: "top 50%",
@@ -69,7 +72,7 @@ function wipeFx() {
   }));
   secs.forEach((s, i) => {
     if (!i) return;
-    if (!desk) {
+    if (!scene(i)) {
       gsap.timeline({ scrollTrigger: { trigger: s, start: "top 60%", toggleActions: "play none none reverse" } })
         .from(Array.from(s.children), { opacity: 0, duration: 0.7, ease: "power2.out" });
       return;
@@ -89,8 +92,19 @@ function wipeFx() {
 function gapFx() {
   const g = document.getElementById("gap");
   if (!g) return;
-  const cta = q(g, ".gcta");
-  gsap.from(cta, { y: 40, opacity: 0, duration: 0.8, ease: "power3.out", scrollTrigger: { trigger: cta, start: "top 88%" } });
+  // Desktop: the scene change holds #gap's content still while it fades in, so its children's scroll
+  // positions are shifted and their triggers would fire at load. Trigger off the section itself instead:
+  // the content fades in from "top 50%", these play just after. Mobile scrolls normally: use the elements.
+  const desk = !isMobile();
+  const at = (el: Element, mob: string, d: string) => (desk ? { trigger: g, start: d } : { trigger: el, start: mob });
+  gsap.from(qa(g, ".gl span"), { yPercent: 110, opacity: 0, duration: 0.9, ease: "power4.out", stagger: 0.12, scrollTrigger: at(g, "top 75%", "top 45%") });
+  const cards = qa(g, ".gc"), cta = q(g, ".gcta");
+  const count = (el: HTMLElement) => { const o = { v: 0 }; el.textContent = "0"; return gsap.to(o, { v: Number(el.dataset.to), duration: 0.8, ease: "power2.out", onUpdate: () => { el.textContent = String(Math.round(o.v)); } }); };
+  // plays once when reached (no pin, no scrub), so a stop mid-scroll never leaves cards half shown
+  gsap.from(cards, { y: 60, opacity: 0, duration: 0.8, ease: "power3.out", stagger: 0.15, scrollTrigger: at(q(g, ".gs"), "top 80%", "top 35%") });
+  qa(g, ".gcount").forEach((el) => { el.textContent = "0"; ScrollTrigger.create({ ...at(el, "top 85%", "top 30%"), once: true, onEnter: () => { count(el).duration(1.6); } }); });
+  gsap.from(qa(g, ".bar i b"), { scaleX: 0, duration: 1.2, ease: "power3.inOut", stagger: 0.1, scrollTrigger: at(q(g, ".gs"), "top 70%", "top 30%") });
+  gsap.from(cta, { y: 40, opacity: 0, duration: 0.8, ease: "power3.out", scrollTrigger: at(cta, "top 88%", "top 20%") });
 }
 
 function agentFx(mob: boolean) {
@@ -119,9 +133,9 @@ function agentFx(mob: boolean) {
   tl.to(q(g, ".ft"), { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, "+=.2");
   st.forEach((s) => s.classList.remove("on"));
   if (!mob) gsap.set(g, { padding: "var(--hsafe) 0 48px" });
-  if (mob) { ScrollTrigger.create({ animation: tl, trigger: g, start: "top 65%" }); return; } // plays once, no half states
-  const dur = tl.duration();
-  ScrollTrigger.create({ animation: tl, trigger: g, start: "top top", end: "+=1800", pin: true, scrub: true, ...snapPts(AT.map((a) => (a + 0.6) / dur)) });
+  // Plays by itself once the section is mostly on screen (no pin, no scroll-driven steps);
+  // scrolling on just moves to the next section.
+  ScrollTrigger.create({ animation: tl, trigger: g, start: mob ? "top 65%" : "top 40%", once: true });
 }
 
 function workFx(signal: AbortSignal) {
@@ -144,6 +158,8 @@ function workFx(signal: AbortSignal) {
     const old = panels[cur];
     cur = k;
     btns.forEach((b, j) => b.classList.toggle("on", j === k));
+    // bars: sites already seen stay full, the current one fills by itself, later ones empty
+    btns.forEach((b, j) => gsap.to(q(b, "em"), { width: j <= k ? "100%" : "0%", duration: j === k ? 0.9 : 0.3, ease: "power2.out", overwrite: true }));
     if (old) gsap.to(qa(old, ".wp-head,.wp-box"), { opacity: 0, y: -24, duration: 0.3, stagger: 0.03, onComplete: () => { if (old !== panels[cur]) old.classList.remove("on"); } });
     panels.forEach((p, j) => { if (j !== k && p !== old) p.classList.remove("on"); });
     const p = panels[k];
@@ -156,44 +172,59 @@ function workFx(signal: AbortSignal) {
     gsap.fromTo(sparks[k], { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 1.4, ease: "power2.inOut", delay: old ? 0.5 : 0.3, overwrite: true });
   };
   panels.forEach((p, j) => { if (j) p.classList.remove("on"); });
+  // The first panel used to sit fully drawn during the crossfade from the section before, then snap to
+  // empty and pop back in when the pin started. Now it starts empty and builds in while the crossfade runs.
+  gsap.set(qa(panels[0], ".wp-head,.wp-box"), { opacity: 0 });
+  gsap.set(sparks[0], { clipPath: "inset(0 100% 0 0)" });
+  qa(panels[0], ".pcount").forEach((el) => { const t = el.getAttribute("data-t") ?? el.textContent ?? ""; el.setAttribute("data-t", t); el.textContent = t.replace(/\d+(\.\d+)?(?!.*\d)/, "0"); });
+  ScrollTrigger.create({ trigger: sec, start: "top 40%", once: true, onEnter: () => { if (cur < 0) show(0); } });
   const st = ScrollTrigger.create({
-    trigger: sec, start: "top top", end: "+=" + panels.length * innerHeight, pin: true, anticipatePin: 1,
-    ...snapPts(panels.map((_, j) => (j + 0.7) / panels.length)), // each panel fully shown, graph drawn
-    onEnter: () => { if (cur < 0) show(0); },
+    // one scroll per site: the pin stops at 0 (first site), then one stop per next site; one more scroll leaves
+    trigger: sec, start: "top top", end: "+=" + (panels.length - 1) * innerHeight, pin: true, anticipatePin: 1,
+    ...snapPts(panels.slice(1, -1).map((_, j) => (j + 1) / (panels.length - 1))),
     onUpdate: (s) => {
-      const n = panels.length;
-      show(Math.min(n - 1, Math.floor(s.progress * n)));
-      btns.forEach((b, j) => { const f = Math.max(0, Math.min(1, s.progress * n - j)); q(b, "em").style.width = f * 100 + "%"; });
+      const n = panels.length - 1;
+      show(Math.min(n, Math.floor(s.progress * n + 0.75))); // switch early, so the next site starts as soon as you scroll
     },
   });
   btns.forEach((b, j) => b.addEventListener("click", () => {
-    const y = st.start + ((j + 0.5) / panels.length) * (st.end - st.start);
+    const y = st.start + (j / (panels.length - 1)) * (st.end - st.start);
     const sm = ensureSmoother();
     if (sm) sm.scrollTo(y, { duration: 0.9 }); else scrollTo({ top: y, behavior: "smooth" });
   }, { signal }));
-  if (st.isActive || st.progress > 0) show(Math.min(panels.length - 1, Math.floor(st.progress * panels.length)));
+  if (st.isActive || st.progress > 0) show(Math.min(panels.length - 1, Math.floor(st.progress * (panels.length - 1) + 0.75)));
   // undo the pinned layout when the page unmounts (ctx.revert handles tweens, not classes)
   signal.addEventListener("abort", () => { sec.classList.remove("pinned"); panels.forEach((p, j) => p.classList.toggle("on", j === 0)); });
 }
 
 // Desktop: pinned stage, one step at a time in the same spot, then a full diagram. Mobile keeps the list.
 function howStory(g: HTMLElement) {
-  const slides = qa(g, ".hs"), dia = q(g, ".hdia");
+  // One scroll per step: you arrive on step 1 (bar already part-filled), each scroll plays the next step by itself,
+  // the last stop shows all four steps together, one more scroll leaves.
+  const slides = qa(g, ".hs"), dia = q(g, ".hdia"), bar = q(g, ".hln i");
+  const stops = slides.length; // steps 2..4 + the all-steps view
   g.classList.add("fx");
   gsap.set(slides.slice(1), { opacity: 0, y: 50 });
-  const tl = gsap.timeline({ paused: true });
-  tl.to(q(g, ".hln i"), { scaleX: 1, duration: slides.length * 1.2, ease: "none" }, 0);
+  gsap.set(bar, { scaleX: 1 / (stops + 1) });
+  const tl = gsap.timeline({ paused: true }).addLabel("s0", 0);
   slides.forEach((s, i) => {
-    const at = i * 1.2;
-    if (i) tl.to(s, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, at);
-    tl.to(s, { opacity: 0, y: -50, duration: 0.5, ease: "power2.in" }, at + 0.8);
+    const at = i * 1 + 0.01;
+    tl.to(s, { opacity: 0, y: -50, duration: 0.4, ease: "power2.in" }, at);
+    if (i + 1 < slides.length) tl.to(slides[i + 1], { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, at + 0.3);
+    else tl.to(dia, { opacity: 1, duration: 0.3 }, at + 0.3)
+      .fromTo(q(dia, ".dl"), { scaleX: 0 }, { scaleX: 1, duration: 0.8, ease: "power2.out" }, at + 0.3)
+      .from(qa(dia, ".dn"), { y: 30, opacity: 0, duration: 0.4, ease: "power3.out", stagger: 0.12 }, at + 0.3);
+    tl.to(bar, { scaleX: (i + 2) / (stops + 1), duration: 0.6, ease: "power2.out" }, at)
+      .addLabel("s" + (i + 1), at + 0.9);
   });
-  const end = slides.length * 1.2;
-  tl.to(dia, { opacity: 1, duration: 0.3 }, end)
-    .fromTo(q(dia, ".dl"), { scaleX: 0 }, { scaleX: 1, duration: 1, ease: "none" }, end)
-    .from(qa(dia, ".dn"), { y: 30, opacity: 0, duration: 0.4, ease: "power3.out", stagger: 0.25 }, end);
-  const dur = tl.duration();
-  ScrollTrigger.create({ animation: tl, trigger: g, start: "top top", end: "+=" + innerHeight * 4, pin: true, scrub: true, ...snapPts(slides.map((_, i) => (i * 1.2 + 0.65) / dur)) });
+  let cur = 0;
+  const go = (k: number) => { if (k === cur) return; cur = k; tl.tweenTo("s" + k, { duration: 0.9, ease: "none", overwrite: true }); };
+  ScrollTrigger.create({
+    trigger: g, start: "top top", end: "+=" + innerHeight * stops, pin: true,
+    ...snapPts(Array.from({ length: stops - 1 }, (_, j) => (j + 1) / stops)),
+    onUpdate: (st) => go(Math.min(stops, Math.floor(st.progress * stops + 0.75))), // switch early: a small scroll is enough
+    onLeaveBack: () => go(0),
+  });
 }
 
 function howFx(mob: boolean) {
