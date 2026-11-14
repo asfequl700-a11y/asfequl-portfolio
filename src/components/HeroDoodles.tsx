@@ -15,6 +15,8 @@ const TIMING = { dur: "24s", begin: "0s", repeatCount: "indefinite", keyTimes: "
 
 function Flight({ v }: { v: keyof typeof FLIGHTS }) {
   const f = FLIGHTS[v];
+  // start mid-flight (negative begin) so the plane is already on screen at load, not flying in from far left
+  const t = { ...TIMING, begin: `-${(((420 + (v === "dk" ? 80 : 40)) / f.L) * 18).toFixed(2)}s` };
   const id = `hd-path-${v}`;
   const dash = (o: number) => `${G + f.B - o}`;
   const dashes = `${dash(0)};${dash(f.L)};${dash(f.L)}`;
@@ -25,13 +27,13 @@ function Flight({ v }: { v: keyof typeof FLIGHTS }) {
       {/* ribbon: white outline + dark fill, as one dash travelling along the path */}
       {[["#fff", f.w], ["#101935", f.w - 4]].map(([c, w]) => (
         <use key={c} href={`#${id}`} stroke={c as string} strokeWidth={w} strokeDasharray={`${f.B} 99999`} strokeDashoffset={dash(0)}>
-          <animate attributeName="stroke-dashoffset" values={dashes} {...TIMING} />
+          <animate attributeName="stroke-dashoffset" values={dashes} {...t} />
         </use>
       ))}
       <text className={hand.className} fill="#fff" fontSize={f.font} dominantBaseline="central">
         <textPath href={`#${id}`} startOffset={14 - G - f.B}>
           {MSG}
-          <animate attributeName="startOffset" values={text} {...TIMING} />
+          <animate attributeName="startOffset" values={text} {...t} />
         </textPath>
       </text>
       <g className="hd-ink">
@@ -44,7 +46,7 @@ function Flight({ v }: { v: keyof typeof FLIGHTS }) {
           <circle cx="18" cy="-1" r="3" />
           <path className="hd-prop" d="M 38 -11 L 38 13" />
         </g>
-        <animateMotion path={f.d} rotate="auto" keyPoints="0;1;1" {...TIMING} />
+        <animateMotion path={f.d} rotate="auto" keyPoints="0;1;1" {...t} />
       </g>
     </svg>
   );

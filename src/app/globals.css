@@ -916,7 +916,7 @@ body:has(.wipebg) .vhead{background:transparent}
 .hd-wave{position:absolute;left:0;right:0;bottom:30px;height:16px;opacity:.5;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='16'%3E%3Cpath d='M0 8 Q20 1 40 8 T80 8' fill='none' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") repeat-x 0 0/80px 16px;animation:hdwave 5s linear infinite}
 .hd-wave.w2{bottom:12px;opacity:.25;animation-duration:8s;animation-direction:reverse}
 @keyframes hdwave{to{background-position-x:80px}}
-.hd-boat{position:absolute;bottom:34px;left:0;width:84px;animation:hdsail 45s linear infinite}
+.hd-boat{position:absolute;bottom:34px;left:0;width:84px;animation:hdsail 45s linear -6s infinite}
 .hd-boat svg{display:block;width:100%;animation:hdbob 3s ease-in-out infinite alternate;transform-origin:50% 90%}
 @keyframes hdsail{from{transform:translateX(-120px)}to{transform:translateX(100vw)}}
 @keyframes hdbob{from{transform:rotate(-4deg) translateY(0)}to{transform:rotate(4deg) translateY(3px)}}
@@ -925,7 +925,7 @@ body:has(.wipebg) .vhead{background:transparent}
   .hero .hgrid{padding-top:150px}.hero{padding-bottom:110px}
   .hero .muted{font-size:19px!important}
   .hero .arch{width:86%;margin:0 auto;rotate:2.2deg}
-  .hd-boat{width:64px}
+  .hd-boat{width:64px;animation-delay:-14s}
 }
 @media (prefers-reduced-motion:reduce){.hd-flight{display:none}}
 
