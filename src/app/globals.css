@@ -886,8 +886,9 @@ body:has(.wipebg) .vhead{background:transparent}
 #work .wp-grid>.wp-proof{display:none}
 @media (max-width:900px){
   .wp-main>.proof{display:none}
-  #work .wp-grid>.wp-proof{display:flex;padding:12px;justify-content:center}
-  .wp-proof .proof{position:static;width:100%;padding:8px}
-  .wp-proof .proof img{height:auto;aspect-ratio:16/10}
-  .wp-proof .proof span{font-size:13px}
+  #work .wp-grid>.wp-proof{display:block;padding:0;overflow:hidden;position:relative;min-height:140px}
+  .wp-proof .proof{position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;border-radius:0;background:#fff}
+  .wp-proof .proof:hover,.wp-proof .proof:focus-visible{transform:none}
+  .wp-proof .proof img{width:100%;height:100%;object-fit:cover;object-position:top left;border-radius:0}
+  .wp-proof .proof span{position:absolute;left:8px;bottom:8px;margin:0;padding:4px 10px;border-radius:999px;background:rgba(11,20,48,.85);color:#EEF1F8;font-size:12px}
 }
