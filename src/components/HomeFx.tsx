@@ -89,13 +89,7 @@ function wipeFx() {
 function gapFx() {
   const g = document.getElementById("gap");
   if (!g) return;
-  gsap.from(qa(g, ".gl span"), { yPercent: 110, opacity: 0, duration: 0.9, ease: "power4.out", stagger: 0.12, scrollTrigger: { trigger: g, start: "top 75%" } });
-  const cards = qa(g, ".gc"), cta = q(g, ".gcta");
-  const count = (el: HTMLElement) => { const o = { v: 0 }; el.textContent = "0"; return gsap.to(o, { v: Number(el.dataset.to), duration: 0.8, ease: "power2.out", onUpdate: () => { el.textContent = String(Math.round(o.v)); } }); };
-  // plays once when reached (no pin, no scrub), so a stop mid-scroll never leaves cards half shown
-  gsap.from(cards, { y: 60, opacity: 0, duration: 0.8, ease: "power3.out", stagger: 0.15, scrollTrigger: { trigger: q(g, ".gs"), start: "top 80%" } });
-  qa(g, ".gcount").forEach((el) => { el.textContent = "0"; ScrollTrigger.create({ trigger: el, start: "top 85%", once: true, onEnter: () => { count(el).duration(1.6); } }); });
-  gsap.from(qa(g, ".bar i b"), { scaleX: 0, duration: 1.2, ease: "power3.inOut", stagger: 0.1, scrollTrigger: { trigger: q(g, ".gs"), start: "top 70%" } });
+  const cta = q(g, ".gcta");
   gsap.from(cta, { y: 40, opacity: 0, duration: 0.8, ease: "power3.out", scrollTrigger: { trigger: cta, start: "top 88%" } });
 }
 

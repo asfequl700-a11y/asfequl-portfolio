@@ -14,12 +14,11 @@ const needs = ["A new website", "AI receptionist", "AI agents & automation", "No
 export default function ContactForm() {
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.currentTarget;
-    // TODO Fahim: wire an email API here (for example a Next.js route handler that calls Resend,
-    // with the API key in .env.local). Until then nothing is sent; the visitor sees the toast below.
-    // const data = Object.fromEntries(new FormData(form));
-    form.reset();
-    toast("Thanks! The form is not connected yet.", { description: `Please also email me at ${site.email}`, duration: 10000 });
+    const d = Object.fromEntries(new FormData(e.currentTarget)) as Record<string, string>;
+    // shortcut: opens the visitor's email app instead of sending from a server; upgrade to Resend if visitors without a mail app matter.
+    const body = `Name: ${d.name}\nEmail: ${d.email}\nNeed: ${d.need}\n\n${d.message}`;
+    window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(`Website enquiry: ${d.need}`)}&body=${encodeURIComponent(body)}`;
+    toast("Your email app should open now.", { description: `If it doesn't, email me at ${site.email}`, duration: 10000 });
   };
 
   return (

@@ -3,7 +3,7 @@
 
 export const site = {
   name: "Asfequl Alam Fahim",
-  url: "https://asfequl-portfolio.vercel.app", // TODO Fahim: change to the new domain once it is bought
+  url: "https://hellofahim.com",
   email: "asfequl@hellofahim.com",
   linkedin: "https://www.linkedin.com/in/asfequl-alam-fahim-474182399/",
   x: "https://x.com/Asfequl_Alam",
@@ -77,44 +77,6 @@ export const companies: Company[] = [
   },
 ];
 
-// Home "The gap is growing" cards. These come from the linked public sources, not from Fahim.
-// TODO Fahim: open each source once and check the number still matches before going live.
-export type MarketStat = { n: number; after: string; text: string; bars: { label: string; w: string; shown: string; hot?: boolean }[]; source: string; href: string };
-
-export const marketStats: MarketStat[] = [
-  {
-    n: 58, after: "%",
-    text: "of US small businesses now use AI. In 2023 it was 23%.",
-    bars: [
-      { label: "2023", w: "23%", shown: "23%" },
-      { label: "2024", w: "40%", shown: "40%" },
-      { label: "2025", w: "58%", shown: "58%", hot: true },
-    ],
-    source: "Source: U.S. Chamber of Commerce, 2025 ↗",
-    href: "https://www.uschamber.com/technology/empowering-small-business-the-impact-of-technology-on-u-s-small-business",
-  },
-  {
-    n: 3, after: " in 4",
-    text: "small and medium businesses are already putting money into AI.",
-    bars: [
-      { label: "invest", w: "75%", shown: "75%", hot: true },
-      { label: "not yet", w: "25%", shown: "25%" },
-    ],
-    source: "Source: Salesforce SMB Trends, 2025 ↗",
-    href: "https://www.salesforce.com/blog/ai-and-the-future-of-business/",
-  },
-  {
-    n: 2, after: "x",
-    text: "Growing businesses are nearly twice as likely to invest in AI as struggling ones.",
-    bars: [
-      { label: "growing", w: "96%", shown: "~2x", hot: true },
-      { label: "struggle", w: "50%", shown: "1x" },
-    ],
-    source: "Source: Salesforce SMB Trends, 2025 ↗",
-    href: "https://www.salesforce.com/blog/ai-and-the-future-of-business/",
-  },
-];
-
 // Builds the chart path the mockups used: 12 points spread across `w`.
 export const sparkPoints = (ys: number[], w: number) => ys.map((y, i) => `${+((i * w) / (ys.length - 1)).toFixed(1)} ${y}`);
 
@@ -123,8 +85,5 @@ export const sparkPoints = (ys: number[], w: number) => ys.map((y, i) => `${+((i
 // then delete the demo flag. Never publish demo entries.
 export type Testimonial = { quote: string; name: string; title: string; company: string; logo: string; darkLogo?: boolean; demo?: boolean };
 
-export const testimonials: Testimonial[] = [
-  { demo: true, quote: "Placeholder quote. Two or three sentences from the CEO about what Fahim worked on and what changed for the site will go here.", name: "Name Surname", title: "CEO", company: "Ryne AI", logo: "/logo-ryne.png" },
-  { demo: true, quote: "Placeholder quote. A short line from the marketing lead about working with Fahim day to day: how he communicates and gets things done.", name: "Name Surname", title: "Marketing Manager", company: "Humaniser", logo: "/logo-humaniser.png" },
-  { demo: true, quote: "Placeholder quote. What it was like to hand the website over to Fahim, and what improved after he joined.", name: "Name Surname", title: "Founder", company: "Reilaa", logo: "/logo-reilaa.png", darkLogo: true },
-];
+// Empty on purpose: the section stays hidden until real, approved quotes are added.
+export const testimonials: Testimonial[] = [];

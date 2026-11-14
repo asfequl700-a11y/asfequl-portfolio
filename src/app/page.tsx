@@ -7,7 +7,6 @@ import { Ar, FinalCta } from "../components/ui";
 import { WorkPanels } from "../components/Work";
 import { Testimonials } from "../components/Testimonials";
 import HomeFx from "../components/HomeFx";
-import { marketStats } from "../data/site";
 import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -29,16 +28,6 @@ export default function HomePage() {
     <>
       <SiteFx />
 <section className="night hero fs"><div className="hglow" aria-hidden="true"></div><div className="wrap"><div className="hgrid"><div style={{ display: "flex", flexDirection: "column", gap: "28px", position: "relative", zIndex: "2" }}><h1><span className="sr-only">Websites that win you jobs. AI that answers every call. Automations that do the busywork.</span><span className="rot rot2" aria-hidden="true"><span>Websites that<br /><em>win you jobs.</em></span><span>AI that answers<br /><em>every call.</em></span><span>Automations that<br /><em>do the busywork.</em></span></span></h1><p className="muted" style={{ fontSize: "21px", maxWidth: "30em" }}>I&apos;m Fahim. I build websites and AI helpers for <span className="rot" style={{ color: "#EEF1F8", fontWeight: "600" }}><span>plumbers.</span><span>clinics.</span><span>creators.</span></span><br />So no call, lead or message slips through.</p><div style={{ display: "flex", gap: "14px", flexWrap: "wrap" }}><Link className={buttonVariants({ variant: "brandStill" })} href="/contact">Book a free call<Ar /></Link><Link className={buttonVariants({ variant: "brandGhost" })} href="/projects">See what I&apos;ve built<Ar /></Link></div></div><div style={{ position: "relative", justifySelf: "end" }}><div className="arch"><Image src="/profile.jpg" alt="Fahim smiling, head and shoulders" fill sizes="(max-width: 900px) 100vw, 360px" preload /></div><div className="pcard" aria-label="Animation: a missed call is answered by AI and booked"><div className="prow"><span className="ic ringer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z" /></svg></span><div><b>Incoming call</b><br /><span style={{ color: "#5A6380" }}>You&apos;re on a job · 2:14 PM</span></div></div><div className="bub c st">&quot;My kitchen tap won&apos;t stop leaking.&quot;</div><div className="bub a st s2">&quot;I can help. Is tomorrow at 10 OK?&quot;</div><div className="bub c st s3">&quot;Perfect, thanks!&quot;</div><span className="okchip st s4">✓ Booked · Tue 10:00 · text sent to you</span></div></div></div></div></section><section className="sec fs" id="gap"><div className="wrap">
-<span className="kick">The gap is growing</span>
-<h2 className="gl"><span>Your competitors</span><span>already <em>started.</em></span></h2>
-<div className="gs">
-{marketStats.map((m) => (
- <div key={m.text} className="gc"><div className="gn"><span className="gcount" data-to={m.n}>{m.n}</span>{m.after}</div>
-  <p>{m.text}</p>
-  <div className="bars">{m.bars.map((b) => <div key={b.label} className={b.hot ? "bar hot" : "bar"}><span>{b.label}</span><i><b style={{ "--w": b.w } as React.CSSProperties}></b></i><span>{b.shown}</span></div>)}</div>
-  <a href={m.href} target="_blank" rel="noopener">{m.source}</a></div>
-))}
-</div>
 <div className="gcta"><h3>Don&apos;t be the business still missing calls. Let&apos;s set you up.</h3>
  <div><Link className={buttonVariants({ variant: "brandStill" })} href="/contact">Book a free call<Ar /></Link><Link className={buttonVariants({ variant: "brandGhost" })} href="/services" style={{ color: "#EEF1F8" }}>See the demos<Ar /></Link></div></div>
 </div>
