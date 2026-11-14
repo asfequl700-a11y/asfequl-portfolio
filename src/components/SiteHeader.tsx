@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { site } from "../data/site";
 
 const links = [
   ["/", "Home"],
@@ -28,6 +29,7 @@ const lightPages = ["/services", "/about"];
 
 export default function SiteHeader() {
   const path = usePathname();
+  const onContact = path === "/contact";
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
   // Fixed header: full width over the hero, then it gathers into one compact box once the hero has scrolled away
@@ -74,14 +76,26 @@ export default function SiteHeader() {
             </Link>
           ))}
         </nav>
-        <Link
-          className={buttonVariants({ variant: "brandStill" })}
-          href="/contact"
-          style={{ minHeight: "44px" }}
-        >
-          Book a free call
-          <Ar />
-        </Link>
+        {onContact ? (
+          // Already on the form: offer the direct email instead of a link back to this page
+          <a
+            className={buttonVariants({ variant: "brandStill" })}
+            href={`mailto:${site.email}`}
+            style={{ minHeight: "44px" }}
+          >
+            Email me
+            <Ar />
+          </a>
+        ) : (
+          <Link
+            className={buttonVariants({ variant: "brandStill" })}
+            href="/contact"
+            style={{ minHeight: "44px" }}
+          >
+            Book a free call
+            <Ar />
+          </Link>
+        )}
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger
             render={<Button variant="brandGhost" className="mbtn" />}
@@ -105,10 +119,10 @@ export default function SiteHeader() {
             <Separator className="my-2" />
             <Link
               className={buttonVariants({ variant: "brand" })}
-              href="/contact"
+              href={onContact ? `mailto:${site.email}` : "/contact"}
               onClick={close}
             >
-              Book a free call
+              {onContact ? "Email me" : "Book a free call"}
               <Ar />
             </Link>
           </SheetContent>

@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const needs = ["A new website", "AI receptionist", "AI agents & automation", "Not sure yet"];
 
@@ -23,17 +22,28 @@ export default function ContactForm() {
 
   return (
     <form className="vform" onSubmit={onSubmit}>
-      <div><Label htmlFor="n">Your name</Label><Input id="n" name="name" placeholder="Jane Smith" required autoComplete="name" /></div>
-      <div><Label htmlFor="e">Email</Label><Input id="e" name="email" type="email" placeholder="jane@business.com" required autoComplete="email" /></div>
-      <div>
-        <Label htmlFor="b">What do you need?</Label>
-        <Select name="need" defaultValue={needs[0]}>
-          <SelectTrigger id="b"><SelectValue /></SelectTrigger>
-          <SelectContent>{needs.map((n) => <SelectItem key={n} value={n}>{n}</SelectItem>)}</SelectContent>
-        </Select>
+      <div className="vf-head">
+        <b>Start a project</b>
+        <span>Tell me a little about your business.</span>
       </div>
-      <div><Label htmlFor="m">Tell me a bit more</Label><Textarea id="m" name="message" rows={4} placeholder="I run a plumbing business and miss calls when I'm on a job." required /></div>
-      <Button variant="brand" type="submit">Send message</Button>
+      <div className="vf-row">
+        <div><Label htmlFor="n">Your name</Label><Input id="n" name="name" placeholder="Jane Smith" required autoComplete="name" /></div>
+        <div><Label htmlFor="e">Email</Label><Input id="e" name="email" type="email" placeholder="jane@business.com" required autoComplete="email" /></div>
+      </div>
+      <fieldset className="vf-need">
+        <legend>What do you need?</legend>
+        <div>
+          {needs.map((n, i) => (
+            <label key={n} className="vf-chip">
+              <input type="radio" name="need" value={n} defaultChecked={i === 0} />
+              <span>{n}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      <div><Label htmlFor="m">Tell me a bit more</Label><Textarea id="m" name="message" rows={3} placeholder="I run a plumbing business and miss calls when I'm on a job." required /></div>
+      <Button variant="brand" type="submit" className="vf-send">Send message<span aria-hidden="true">&rarr;</span></Button>
+      <p className="vf-note">I reply personally within 48 hours.</p>
     </form>
   );
 }
