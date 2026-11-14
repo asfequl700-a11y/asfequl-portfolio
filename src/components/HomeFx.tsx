@@ -16,9 +16,11 @@ export default function HomeFx() {
   useEffect(() => {
     page = mark.current!.closest<HTMLElement>(".page")!;
     document.body.classList.add("grain");
-    if (reducedMotion()) return () => document.body.classList.remove("grain");
-    ensureSmoother();
     const ac = new AbortController();
+    fitAgentLine();
+    window.addEventListener("resize", fitAgentLine, { signal: ac.signal });
+    if (reducedMotion()) return () => { ac.abort(); document.body.classList.remove("grain"); };
+    ensureSmoother();
     const mob = isMobile();
     const ctx = gsap.context(() => {
       gapFx();
@@ -38,7 +40,7 @@ export default function HomeFx() {
       requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.add("hero-go")));
     };
     const loaded = document.readyState === "complete" ? null : new Promise((r) => window.addEventListener("load", r, { once: true, signal: ac.signal }));
-    Promise.all([document.fonts?.ready, loaded]).then(go);
+    Promise.all([document.fonts?.ready, loaded]).then(() => { fitAgentLine(); go(); });
     const cap = setTimeout(go, 1500);
     return () => {
       document.documentElement.classList.remove("hero-go");
@@ -127,6 +129,21 @@ function gapFx() {
   gsap.from(cta, { y: 40, opacity: 0, duration: 0.8, ease: "power3.out", scrollTrigger: at(cta, "top 88%", "top 20%") });
 }
 
+// Phones/tablets: the steps stack in a column of uneven heights, so the line is fitted from the
+// first icon's centre to the last one's (no tail sticking out below), and each step's share of it saved.
+let lineAt: number[] = [];
+function fitAgentLine() {
+  const g = byId("agent");
+  const ln = g && q(g, ".ln");
+  if (!g || !ln) return;
+  const st = qa(g, ".st");
+  if (!matchMedia("(max-width:900px)").matches) { ln.style.top = ln.style.height = ln.style.bottom = ""; lineAt = st.map((_, i) => i / (st.length - 1)); return; }
+  const c = st.map((s) => { const ic = q(s, ".ic"); return s.offsetTop + ic.offsetTop + ic.offsetHeight / 2; });
+  const a = c[0], len = c[c.length - 1] - a;
+  ln.style.top = a + "px"; ln.style.height = len + "px"; ln.style.bottom = "auto";
+  lineAt = c.map((v) => (v - a) / len);
+}
+
 function agentFx(mob: boolean) {
   const g = byId("agent");
   if (!g) return;
@@ -139,10 +156,11 @@ function agentFx(mob: boolean) {
   tl.set(ln, mob ? { scaleY: 0 } : { scaleX: 0 }, 0).set(dot, mob ? { top: "0%" } : { left: "0%" }, 0).set(o, { v: 0 }, 0)
     .set(qa(g, ".cd"), { opacity: 0, y: 12 }, 0).set(q(g, ".ft"), { opacity: 0, y: 16 }, 0);
   st.forEach((s, i) => {
-    const at = 0.2 + i * 1.1, p = (i / n) * 100 + "%";
+    // read when the tween first plays, i.e. after fonts have settled the step heights
+    const f = () => (mob ? lineAt[i] ?? i / n : i / n), at = 0.2 + i * 1.1, p = () => f() * 100 + "%";
     if (i) {
       const m = { duration: 0.9, ease: "power2.inOut" };
-      tl.to(ln, { ...(mob ? { scaleY: i / n } : { scaleX: i / n }), ...m }, at - 0.9);
+      tl.to(ln, { ...(mob ? { scaleY: f } : { scaleX: f }), ...m }, at - 0.9);
       tl.to(dot, { ...(mob ? { top: p } : { left: p }), ...m }, at - 0.9);
       tl.to(o, { v: T[i], duration: 0.9, ease: "none", onUpdate: () => { ck.textContent = fmt(o.v); } }, at - 0.9);
     }
