@@ -868,3 +868,6 @@ body:has(.wipebg) .vhead{background:transparent}
 @media (max-width:900px){.v .hero h1{font-size:min(52px,calc((100vw - 40px) / 8))!important}.hero h1 .rot2>span{white-space:nowrap}}
 /* phones/tablets: the orange hero glow sits behind the call card and gets cut off with a hard edge when the page fades to cream, so hide it */
 @media (max-width:900px){.hglow{display:none}}
+/* phones/tablets: the call card's big dark shadow ran past the hero's bottom and got clipped (overflow:hidden),
+   leaving a dirty grey band with a hard edge once the page turns cream. Smaller shadow + room for it. */
+@media (max-width:900px){.hero{padding-bottom:64px}.hero .pcard{box-shadow:0 10px 28px rgba(4,8,24,.22)}}
