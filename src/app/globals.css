@@ -193,17 +193,15 @@ body:has(.vhead.night){background:#101935}
 .vf-note{margin:-4px 0 0;text-align:center;font-size:13px;color:#8C96B3}
 .vf-send span{transition:transform .25s}
 .vf-send:hover span{transform:translateX(4px)}
-.ctc-alt{display:flex;flex-direction:column;gap:12px;margin-top:clamp(4px,1.5vh,16px);padding-top:clamp(14px,2.4vh,24px);border-top:1px solid rgba(255,255,255,.08);max-width:520px}
+.ctc-alt{display:flex;flex-direction:column;align-items:flex-start;gap:12px;margin-top:clamp(4px,1.5vh,16px);padding-top:clamp(14px,2.4vh,24px);border-top:1px solid rgba(255,255,255,.08);max-width:520px}
+.ctc-rows{display:inline-flex;flex-direction:column;gap:10px;align-self:flex-start}
+.ctc-rows>.mailchip{justify-content:space-between;color:#EEF1F8;text-decoration:none}
+.ctc-row>span:first-child{display:inline-flex;align-items:center;gap:12px}
+.ctc-row svg{color:#C9D2EA}
+.ctc-row .go{background:#EEF1F8;color:#101935;border-radius:999px;padding:10px 18px;font:700 14px var(--f-body),sans-serif;transition:background .2s}
+.ctc-row:hover .go{background:#FF6B1A}
+.ctc-row:focus-visible{outline:2px solid #FF6B1A;outline-offset:2px}
 .ctc-alt-l{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#8C96B3}
-.ctc-alt-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
-.ctc-mail{display:inline-flex;align-items:center;height:48px;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:rgba(255,255,255,.03)}
-.ctc-mail a{display:inline-flex;align-items:center;gap:10px;height:100%;padding:0 14px 0 16px;color:#EEF1F8;text-decoration:none;font-weight:600;font-size:15px}
-.ctc-mail a svg{color:#FF6B1A}
-.ctc-mail button{display:grid;place-items:center;width:46px;height:100%;border:0;border-left:1px solid rgba(255,255,255,.12);background:none;color:#A9B3CC;cursor:pointer;border-radius:0 14px 14px 0;transition:color .2s,background .2s}
-.ctc-ic{display:grid;place-items:center;width:48px;height:48px;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:rgba(255,255,255,.03);color:#C9D2EA;text-decoration:none;transition:color .2s,border-color .2s,background .2s}
-.ctc-mail button:hover,.ctc-ic:hover{color:#FF6B1A;background:rgba(255,255,255,.06)}
-.ctc-ic:hover{border-color:rgba(255,107,26,.5)}
-.ctc-mail a:focus-visible,.ctc-mail button:focus-visible,.ctc-ic:focus-visible{outline:2px solid #FF6B1A;outline-offset:2px}
 @media (max-width:520px){.vf-row{grid-template-columns:1fr}}
 /* shots */
 .shot{background:#FFFFFF;border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
@@ -779,7 +777,7 @@ body:has(.wipebg) .vhead{background:transparent}
   background:rgba(16,25,53,.9);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:#EEF1F8;
   box-shadow:0 12px 32px rgba(16,25,53,.28),inset 0 0 0 1px rgba(255,255,255,.08)}
 .vhead.compact .vnav{background:transparent;transition:background-color .4s ease}
-.vhead.compact .vpill.on{background:#EEF1F8;color:#101935}
+.vhead.compact .vpill.on,.vhead.compact .vpill.on:hover{background:transparent;color:#FF6B1A}
 .vhead .vnav{transition:background-color .4s ease}
 @media (prefers-reduced-motion:reduce){.vhead,.vhead .vtop,.vhead .vnav{transition:none}}
 
