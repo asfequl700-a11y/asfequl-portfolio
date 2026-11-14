@@ -155,7 +155,7 @@ body:has(.vhead.night){background:#101935}
 .vform textarea{resize:none}
 .vform input::placeholder,.vform textarea::placeholder{color:#8A90A2}
 /* contact page: fit hero + form in one screen on desktop */
-.ctc{min-height:100svh;box-sizing:border-box;padding:var(--hsafe) 0 24px;display:flex;align-items:center}
+.ctc{min-height:calc(100svh - var(--hdr));box-sizing:border-box;padding:clamp(16px,3vh,32px) 0;display:flex;align-items:center}
 .ctc>.wrap{width:100%}
 .ctc h1{font-size:clamp(44px,8vh,88px)}
 .ctc .muted{font-size:clamp(16px,2.3vh,20px)}
@@ -839,3 +839,12 @@ body:has(.wipebg) .vhead{background:transparent}
   .v .fs:not(.hero){padding-top:var(--hsafe)!important;padding-bottom:clamp(16px,3vh,40px)!important}
 }
 @media (min-width:901px){.v #svc.fs{padding-bottom:8px!important}}
+/* Inner pages: the closing call + footer fit one desktop screen too (like Home), so the heading never ends up under
+   the nav at the bottom of the page. shortcut: 80px = footer height. */
+@media (min-width:901px){
+  .v section:not(.fs):has(>.final){min-height:calc(100svh - 80px);display:flex;flex-direction:column;justify-content:safe center;padding-top:80px;box-sizing:border-box}
+  .v section:not(.fs)>.final{padding:clamp(20px,4vh,130px) 56px clamp(12px,2vh,80px)}
+  .v section:not(.fs)>.final h2{font-size:clamp(44px,10vh,104px)}
+  .v section:not(.fs)>.final .muted{margin:clamp(12px,2.5vh,26px) auto clamp(16px,3.5vh,36px)!important;font-size:clamp(16px,2.4vh,20px)!important}
+  .v section:not(.fs)>.giant{font-size:clamp(80px,17vh,168px);padding:clamp(8px,2vh,40px) 0 0}
+}
