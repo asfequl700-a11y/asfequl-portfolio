@@ -65,16 +65,18 @@ export function WorkList() {
                 <Image src={c.logo} alt={`${c.name} logo`} width={60} height={60} />
                 <div><b>{c.name}</b><small>{c.role}</small></div>
               </div>
-              <a className="arr" href={c.url}>{c.host} ↗</a>
+              <div className="wf-links">
+                <Proof shot={c.proof} site={c.name} />
+                <a className="arr" href={c.url}>{c.host} ↗</a>
+              </div>
             </div>
             <div className="wf-body">
               <div className="wf-stats">
-                {[...c.stats, c.worth].map((s) => (
+                {[...c.stats, ...(c.stats.some((s) => s.label === c.worth.label) ? [] : [c.worth])].map((s) => (
                   <div key={s.label}><span className="count">{s.value}</span><small>{s.label}</small></div>
                 ))}
               </div>
               <div className="wf-chart">
-                <Proof shot={c.proof} site={c.name} />
                 <div className="wf-axis"><span>{c.span.split(" → ")[0]}</span><span>{c.span.split(" → ")[1]}</span></div>
                 <Spark ys={c.chart} w={560} className="wspark tall" />
               </div>

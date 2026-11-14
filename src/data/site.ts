@@ -34,7 +34,7 @@ export const companies: Company[] = [
     logo: "/logo-ryne.png",
     url: "https://ryne.ai",
     host: "ryne.ai",
-    role: "Website growth & management · UK team · Oct 2025 – now",
+    role: "SEO specialist · Website growth & management · UK team · Oct 2025 – now",
     main: { value: "518K", label: "clicks from Google search" },
     stats: [
       { value: "518K", label: "clicks from Google search" },
@@ -50,7 +50,7 @@ export const companies: Company[] = [
     logo: "/logo-humaniser.png",
     url: "https://humaniser.com",
     host: "humaniser.com",
-    role: "Website growth & management · Nov 2025 – now",
+    role: "SEO specialist · Website growth & management · Nov 2025 – now",
     main: { value: "215K", label: "clicks from Google search in 6 months" },
     stats: [
       { value: "215K", label: "clicks from Google search" },
@@ -67,7 +67,7 @@ export const companies: Company[] = [
     darkLogo: true,
     url: "https://reilaa.com",
     host: "reilaa.com",
-    role: "Website growth & management · Nov 2025 – now",
+    role: "SEO specialist · Website growth & management · Nov 2025 – now",
     main: { value: "6.5M", label: "times shown in Google search" },
     stats: [
       { value: "142K", label: "clicks from Google search" },
@@ -120,10 +120,12 @@ export const marketStats: MarketStat[] = [
 // Builds the chart path the mockups used: 12 points spread across `w`.
 export const sparkPoints = (ys: number[], w: number) => ys.map((y, i) => `${+((i * w) / (ys.length - 1)).toFixed(1)} ${y}`);
 
-// Testimonials. DEMO ONLY until real quotes arrive: every entry with demo: true is
-// placeholder text and shows a "Demo" badge. TODO Fahim: replace with real, approved quotes,
-// then delete the demo flag. Never publish demo entries.
-export type Testimonial = { quote: string; name: string; title: string; company: string; logo: string; darkLogo?: boolean; demo?: boolean };
+// Testimonials: wording approved by Fahim, who checked it with each person (2026-11-14).
+// company: confirmed by Fahim (2026-11-14).
+export type Testimonial = { quote: string; name: string; title: string; photo: string; company?: string };
 
-// Empty on purpose: the section stays hidden until real, approved quotes are added.
-export const testimonials: Testimonial[] = [];
+export const testimonials: Testimonial[] = [
+  { name: "Rajin Syed", title: "Founder & CEO", company: "Ryne AI, Humaniser & Reilaa", photo: "/testimonials/rajin.png", quote: "Fahim has grown our Google traffic month after month. He's fast, he owns his work, and he keeps finding new ways to bring people to the site." },
+  { name: "Arefin Reza", title: "COO & Co-Founder", company: "Ryne AI, Humaniser & Reilaa", photo: "/testimonials/arefin.png", quote: "Fahim is reliable and easy to work with. He reports clearly, hits his deadlines, and the results show in our search numbers." },
+  { name: "George", title: "Marketing Manager", company: "Ryne AI", photo: "/testimonials/george.jpg", quote: "Working with Fahim day to day is simple. He communicates well, moves fast, and always explains what he changed and why." },
+];

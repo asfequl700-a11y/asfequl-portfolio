@@ -7,7 +7,7 @@ import { Testimonials } from "../../components/Testimonials";
 // Ported from _design/v4-Work.dc.html
 export const metadata: Metadata = {
   title: "Work",
-  description: "Website growth and day-to-day management for Ryne AI, Humaniser and Reilaa: what I did and what changed.",
+  description: "SEO, website growth and day-to-day management for Ryne AI, Humaniser and Reilaa: what I did and what changed.",
   alternates: { canonical: "/work" },
 };
 
@@ -15,7 +15,7 @@ export default function WorkPage() {
   return (
     <>
       <SiteFx />
-<section className="night"><div className="wrap"><div className="phero"><span className="kick">Work</span><h1>Three live sites.<br />Real people, real traffic.</h1><p className="lead">I&apos;ve worked on growth and day-to-day management for these websites. Here&apos;s how their Google traffic grew while I worked on them.</p></div></div></section><WorkList /><Testimonials />
+<section className="night"><div className="wrap"><div className="phero"><span className="kick">Work</span><h1>Three live sites.<br />Real people, real traffic.</h1><p className="lead">I&apos;m the SEO specialist for these three websites. I handle their growth and day-to-day management. Here&apos;s what the people I work with say, and how the Google traffic grew.</p></div></div></section><Testimonials /><WorkList />
       <FinalCta title={<>Want this for<br />your site?</>} />
     </>
   );

@@ -777,3 +777,10 @@ body:has(.wipebg) .vhead{background:transparent}
 .proof-dlg::backdrop{background:rgba(5,9,25,.82)}
 .proof-dlg img{display:block;max-width:min(1200px,94vw);max-height:92vh;border-radius:14px}
 .proof-x{position:absolute;top:-14px;right:-14px;width:36px;height:36px;border-radius:50%;border:0;background:#FF6B1A;color:#fff;font:700 22px/1 sans-serif;cursor:pointer}
+
+.tphoto{width:52px;height:52px;border-radius:50%;object-fit:cover;flex:none;border:2px solid #fff;box-shadow:0 0 0 1px #E9E3D6}
+/* Work page: proof thumbnail sits in the card header so it never covers the chart */
+.wf-links{display:flex;align-items:center;gap:18px}
+.wf-links .proof{position:static;width:112px}
+.wf-links .proof img{height:56px}
+.night + .tsec{padding-top:72px}
