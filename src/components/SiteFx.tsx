@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { ensureSmoother, gsap, refreshSoon, isMobile, reducedMotion, ScrollTrigger, snapPts } from "../lib/gsap";
+import { ensureSmoother, gsap, refreshSoon, isMobile, reducedMotion } from "../lib/gsap";
 
 // Shared animations from the mockups (ran on every page): smooth scroll, pinned service cards,
 // count-up numbers, chart lines drawing, section headings rising in. Runs each time its page is shown.
@@ -50,41 +50,6 @@ export default function SiteFx() {
         }));
         row.querySelectorAll(".xc-scene").forEach((s) => fit.observe(s));
         ac.signal.addEventListener("abort", () => fit.disconnect());
-      }
-      if (row && !reduce && !isMobile()) {
-        // Home "Three ways I help": one full panel per service on a pinned stage, swapped one scroll step at a time
-        // (same idea as "Where I've worked"). Step k is fully shown at progress k/(n-1).
-        const cards = gsap.utils.toArray<HTMLElement>(".xc", row);
-        const sec = row.closest<HTMLElement>("#svc")!;
-        const btns = gsap.utils.toArray<HTMLButtonElement>(".svc-prog button", sec);
-        const n = cards.length;
-        const parts = (c: HTMLElement) => c.querySelectorAll(".xc-open > *");
-        let cur = 0;
-        cards.forEach((c, j) => c.classList.toggle("on", j === 0));
-        const show = (k: number) => {
-          if (k === cur) return;
-          const old = cards[cur];
-          cur = k;
-          btns.forEach((b, j) => b.classList.toggle("on", j === k));
-          gsap.to(parts(old), { opacity: 0, y: -24, duration: 0.25, stagger: 0.02, overwrite: true, onComplete: () => { if (old !== cards[cur]) old.classList.remove("on"); } });
-          cards[k].classList.add("on");
-          // the scene loops on its own clock: restart it so the story always begins at its first frame
-          cards[k].querySelectorAll<HTMLElement>(".scene *").forEach((e) => { e.style.animation = "none"; void e.offsetWidth; e.style.animation = ""; });
-          gsap.fromTo(parts(cards[k]), { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out", stagger: 0.08, delay: 0.2, overwrite: true });
-        };
-        const st = ScrollTrigger.create({
-          trigger: sec, start: "top top", end: "+=" + (n - 1) * window.innerHeight, pin: true, ...snapPts([0.5]),
-          onUpdate: (s) => {
-            show(Math.round(s.progress * (n - 1)));
-            btns.forEach((b, j) => { (b.querySelector("em") as HTMLElement).style.width = Math.max(0, Math.min(1, s.progress * (n - 1) - (j - 1))) * 100 + "%"; });
-          },
-        });
-        btns.forEach((b, j) => b.addEventListener("click", () => {
-          const y = st.start + (j / (n - 1)) * (st.end - st.start);
-          const sm = ensureSmoother();
-          if (sm) sm.scrollTo(y, { duration: 0.9 }); else scrollTo({ top: y, behavior: "smooth" });
-        }, { signal: ac.signal }));
-        ac.signal.addEventListener("abort", () => cards.forEach((c, j) => c.classList.toggle("on", j === 0)));
       }
       gsap.utils.toArray<HTMLElement>(".count", root).forEach((el) => {
         // keep the real value: a re-run would otherwise read the "0" a cut-off earlier run left behind

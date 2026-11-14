@@ -643,11 +643,20 @@ body:has(.wipebg) .vhead{background:transparent}
 #how .hwart{width:clamp(200px,24vw,320px);color:#EEF1F8}
 #how .hwart svg{display:block;width:100%;height:auto;overflow:visible}
 #how .hk{display:block;margin-bottom:8px;font:600 15px var(--f-mono),monospace;color:#FF6B1A;letter-spacing:.08em}
-/* sketch loop: each stroke draws in like a pen (in order, --d), holds, fades, redraws - same white ink as the hero doodles */
-#how .hwart .ha-sk{stroke-dasharray:1;stroke-dashoffset:1;animation:haDraw 6s ease-in-out infinite both;animation-delay:calc(var(--d,0) * .35s)}
+/* sketches: hidden until the section arrives (.draw), then each stroke draws in once like a pen (in order, --d)
+   and stays; small idle motions afterwards keep them alive - same white ink as the hero doodles */
+#how .hwart .ha-sk{stroke-dasharray:1;stroke-dashoffset:1}
+#how.draw .hwart .ha-sk{animation:haIn 1s ease-out calc(var(--d,0) * .15s) both}
+#how.draw .hwart .ha-ring{animation:haIn 1s ease-out calc(var(--d,0) * .15s) both,haFade 1.4s ease-in-out 1.8s infinite}
+#how.draw .hwart .ha-star{animation:haIn 1s ease-out calc(var(--d,0) * .15s) both,haFade 1.8s ease-in-out 2s infinite}
+#how.draw .hwart .ha-blink{animation:haIn 1s ease-out calc(var(--d,0) * .15s) both,haFade 1.2s steps(2) 1.8s infinite}
+#how.draw .hwart .ha-flame{transform-box:fill-box;transform-origin:50% 0;animation:haIn 1s ease-out calc(var(--d,0) * .15s) both,haFlame .45s ease-in-out 2s infinite alternate}
+@keyframes haIn{to{stroke-dashoffset:0}}
+@keyframes haFade{50%{opacity:.25}}
+@keyframes haFlame{to{transform:scaleY(.7)}}
+#how .step ul{color:#C9CFDE}
 #how .ha-pen{transform-box:fill-box;transform-origin:30% 90%;animation:haPen 2.4s ease-in-out infinite}
 #how .ha-rocket{animation:haLift 2.2s ease-in-out infinite}
-@keyframes haDraw{0%{stroke-dashoffset:1;opacity:1}28%{stroke-dashoffset:0}82%{stroke-dashoffset:0;opacity:1}94%{stroke-dashoffset:0;opacity:0}100%{stroke-dashoffset:1;opacity:0}}
 @keyframes haPen{50%{transform:translate(-6px,4px) rotate(-3deg)}}
 @keyframes haLift{50%{transform:translateY(-6px)}}
 @media (prefers-reduced-motion:reduce){#how .hwart *{animation:none!important}#how .hwart .ha-sk{stroke-dashoffset:0}}
@@ -964,3 +973,7 @@ input,textarea,select,[contenteditable=true]{-webkit-user-select:text;user-selec
   .ctc .ctc-card{order:1}
   .ctc .ctc-alt{order:2;margin-top:0}
 }
+/* Home on every screen size: plain smooth scrolling (no pinned screens). The three service cards stack like on phones. */
+.xpanels{height:auto;display:grid;gap:16px}
+.xpanels .xc{position:relative;visibility:visible;min-height:560px}
+@media (max-width:900px){.xpanels .xc{min-height:0}}

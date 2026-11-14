@@ -143,16 +143,13 @@ export default function HomePage() {
   <ul className="list"><li>Custom AI agents</li><li>n8n workflows for your tools</li><li>Leads, emails, reports, YouTube</li></ul>
   
  </div>
-</article></div><div className="svc-prog"><button type="button" data-go={0} className="on"><i><em></em></i>Websites</button><button type="button" data-go={1} className=""><i><em></em></i>AI receptionist</button><button type="button" data-go={2} className=""><i><em></em></i>AI agents &amp; automation</button></div></div></section>
+</article></div></div></section>
 <WorkPanels />
 <Testimonials full />
 <section className="sec fs"><div className="wrap"><span className="kick">My AI agents</span><h2>Little helpers I built,<br />each with one job.</h2><ol className="agents"><li className="agr"><span className="agn">01</span><h3>Scout</h3><p className="job">Finds YouTube channels, scores them with AI, saves the good ones.</p><span className="agt">n8n · YouTube API · Gemini</span></li><li className="agr"><span className="agn">02</span><h3>Producer</h3><p className="job">Researches a topic and writes a full video package in Google Docs.</p><span className="agt">n8n · Gemini · Docs</span></li><li className="agr"><span className="agn">03</span><h3>Reader</h3><p className="job">Reads new articles, keeps the ones that matter, sends a summary.</p><span className="agt">n8n · RSS · Discord</span></li><li className="agr"><span className="agn">04</span><h3>Closer</h3><p className="job">Writes a personal email to each lead and checks for replies.</p><span className="agt">n8n · Gmail · Sheets</span></li></ol><Link className={buttonVariants({ variant: "brandGhost" })} style={{ marginTop: "32px" }} href="/projects">See them in action<Ar /></Link></div></section>
 <section className="night fs" id="how"><div className="wrap"><span className="kick">How we&apos;d work</span><h2>From call to live in four steps.</h2><div className="hln"><i /></div>
 <div className="steps">{howSteps.map((s, i) => <div key={s.n} className="step"><div className="stx"><span className="n">{s.n}</span><h3>{s.t}</h3><ul className="muted">{s.li.map((x) => <li key={x}>{x}</li>)}</ul></div><HowArt i={i} /></div>)}</div>
-<div className="hstage" aria-hidden="true">
-{howSteps.map((s, i) => <div key={s.n} className="hs"><span className="big">{s.n}</span><div><h3>{s.t}</h3><ul>{s.li.map((x) => <li key={x}>{x}</li>)}</ul></div><HowArt i={i} /></div>)}
-<div className="hdia"><i className="dl" />{howSteps.map((s, i) => <div key={s.n} className="dn"><div className="dtop"><span className="dc">{s.n}</span><HowArt i={i} /></div><b>{s.t}</b><small>{s.short}</small></div>)}</div>
-</div></div></section>
+</div></section>
 <section className="sec fs"><div className="wrap" style={{ maxWidth: "900px" }}><span className="kick">Questions</span><h2>Before you ask.</h2><div className="faq"><details><summary>How much does it cost?</summary><p>Every business is different, so there is no fixed price list. We talk first, then I send a quote that fits what you need.</p></details><details><summary>How long does it take?</summary><p>It depends on the job. We agree on a timeline together after our call.</p></details><details><summary>Do I need to be technical?</summary><p>No. I set it up, explain it in plain words and stay around after launch.</p></details><details><summary>Who is this not for?</summary><p>Big companies with an IT team. I work best with small, busy businesses.</p></details></div></div></section>
 
       <FinalCta full title={<>Missing calls?<br />Let&apos;s fix that.</>} />
