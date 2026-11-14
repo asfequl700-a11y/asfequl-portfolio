@@ -70,7 +70,7 @@ body:has(.vhead.night){background:#101935}
 .hero h1 em{font-style:normal;color:#FF6B1A}
 .rot{--rh:1.55em;display:inline-block;height:var(--rh);line-height:var(--rh);overflow:hidden;vertical-align:top}
 .rot span{display:block;line-height:var(--rh);animation:v4rot 9s infinite}
-.arch{position:relative;width:360px;height:460px;justify-self:end;border-radius:180px 180px 24px 24px;overflow:hidden;background:#24305A}
+.arch{position:relative;width:360px;height:auto;aspect-ratio:1;justify-self:end;border-radius:28px;overflow:hidden;background:#24305A}
 .arch img{width:100%;height:100%;object-fit:cover;display:block}
 .note-hand{font:600 15px var(--f-display),sans-serif;color:#FFB98F}
 /* floating phone card (hero animation) */
@@ -552,7 +552,7 @@ a{color:inherit}
   .hgrid{grid-template-columns:1fr;gap:30px;padding-top:24px}
   .hero .muted{font-size:18px!important}
   .hgrid>div:last-child{justify-self:auto!important}
-  .hero .arch{width:100%;height:420px}
+  .hero .arch{width:100%;height:auto}
   .pcard{position:relative;left:auto;bottom:auto;width:auto;margin-top:-120px}
   .bigname{font-size:34vw;bottom:-10px}
   #agent{padding:64px 0}
@@ -692,7 +692,7 @@ body:has(.wipebg) .vhead{background:transparent}
 @media (prefers-reduced-motion:reduce){.hglow::before{animation:none}}
 @media (min-width:901px){.hero .pcard{left:-250px;bottom:-30px}}
 /* small laptops / landscape tablets: smaller hero so the call card sits on the photo, not over the headline */
-@media (min-width:901px) and (max-width:1180px){.hero h1{font-size:clamp(56px,6.4vw,76px)}.hero .arch{width:300px;height:400px}.hero .pcard{left:-60px;width:250px}}
+@media (min-width:901px) and (max-width:1180px){.hero h1{font-size:clamp(56px,6.4vw,76px)}.hero .arch{width:300px;height:auto}.hero .pcard{left:-60px;width:250px}}
 /* Home background texture: very soft dots, drawn on the colour backdrop so they sit behind all content (replaces the grain) */
 body.grain .wipebg{background-image:radial-gradient(var(--dot,rgba(128,128,128,.1)) 1.2px,transparent 2px);background-size:24px 24px}
 body.grain::after{display:none}
