@@ -9,6 +9,10 @@ gsap.registerPlugin(ScrollTrigger);
 export { gsap, ScrollTrigger };
 
 export const reducedMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+// cacheComponents keeps visited pages in the DOM, hidden. Never grab (or pin) an element of a hidden page:
+// React later removes that page and crashes if GSAP moved its nodes. Returns the first visible match.
+export const vis = <T extends Element = HTMLElement>(sel: string) =>
+  [...document.querySelectorAll<T>(sel)].find((e) => e.checkVisibility()) ?? null;
 export const isMobile = () => matchMedia("(max-width:900px)").matches;
 
 // One smooth scroller for the whole site (Lenis: native scroll, eased, so pinned sections and fixed

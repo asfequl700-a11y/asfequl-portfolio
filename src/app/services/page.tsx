@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function ServicesPage() {
   return (
-    <>
+    <div className="page">
       <SiteFx />
 <section className="light"><div className="wrap"><div className="phero"><span className="kick">Services</span><h1>Pick the problem.<br />I&apos;ll fix it.</h1><p className="lead">Each service solves one way you lose customers. Start with the one that costs you most.</p></div></div></section><section style={{ paddingBottom: "90px" }}><div className="wrap"><div className="srow"><div style={{ display: "flex", flexDirection: "column", gap: "18px" }}><span className="kick" style={{ margin: "0" }}>01 · Websites</span><h3 style={{ fontSize: "44px" }}>A website that makes the phone ring.</h3><p className="muted" style={{ fontSize: "18px" }}>For when people can&apos;t find you, or your site doesn&apos;t make them call.</p><ul className="ticks"><li>Fast on phones</li><li>Call and quote buttons where thumbs reach</li><li>Page titles and Google basics done</li></ul></div><div className="scene" style={{ background: "#E6EBFF", padding: "48px 36px 0" }} aria-label="Animation: a website builds itself, then a visitor taps Call now">
 <div className="browser" style={{ height: "100%", borderRadius: "16px 16px 0 0" }}>
@@ -70,6 +70,6 @@ export default function ServicesPage() {
 <div className="toast side-50" style={{ position: "absolute", right: "24px", bottom: "24px", width: "250px" }}><span className="ico hot" style={{ width: "36px", height: "36px", borderRadius: "10px" }}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10 21h4" /></svg></span><div><strong>Done for you</strong><small>5 new leads added to your sheet</small></div></div>
 </div></div></div></section>
       <FinalCta title={<>Not sure which one?<br />Ask me.</>} />
-    </>
+    </div>
   );
 }

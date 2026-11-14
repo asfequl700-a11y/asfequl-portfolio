@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Ar } from "./ui";
+import { vis } from "../lib/gsap";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Sheet,
@@ -35,7 +36,7 @@ export default function SiteHeader() {
     let raf = 0;
     const check = () => {
       raf = 0;
-      const hero = document.querySelector("main section");
+      const hero = vis("main section");
       // half-screen: the same moment the home backdrop fades to the next section's colour, so the
       // (transparent, light-text) full bar never sits on a cream background
       setCompact(hero ? hero.getBoundingClientRect().bottom < window.innerHeight * 0.5 : window.scrollY > window.innerHeight * 0.5);

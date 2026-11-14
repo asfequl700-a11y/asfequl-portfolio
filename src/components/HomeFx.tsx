@@ -1,14 +1,20 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { ensureSmoother, gsap, refreshSoon, isMobile, reducedMotion, ScrollTrigger, snapPts } from "../lib/gsap";
 
 const q = <T extends Element = HTMLElement>(root: ParentNode, sel: string) => root.querySelector(sel) as T;
 const qa = <T extends Element = HTMLElement>(root: ParentNode, sel: string) => Array.from(root.querySelectorAll<T>(sel));
+// This page's own <div className="page">. Next keeps visited pages in the DOM (hidden), and the Work page
+// also has an id="work", so never look things up in the whole document.
+let page: HTMLElement;
+const byId = (id: string) => page.querySelector<HTMLElement>("#" + id);
 
 // Home-only animations from v4-Home: "gap" stats, the scroll-scrubbed missed-call story, the pinned work panels.
 export default function HomeFx() {
+  const mark = useRef<HTMLSpanElement>(null);
   useEffect(() => {
+    page = mark.current!.closest<HTMLElement>(".page")!;
     document.body.classList.add("grain");
     if (reducedMotion()) return () => document.body.classList.remove("grain");
     ensureSmoother();
@@ -22,25 +28,35 @@ export default function HomeFx() {
       wipeFx(); // last, same reason
     });
     refreshSoon();
-    // hero fades in only after the setup above has finished its heavy work, so the freeze happens behind a calm screen
-    requestAnimationFrame(() => document.documentElement.classList.add("hero-go"));
+    // The hero fades in only once the page is quiet: after load + fonts, whose layout re-measure (refreshSoon,
+    // ~0.15s of frozen frames each) would otherwise land mid-animation and make it jump. Our frames are queued
+    // after that refresh, so the second one starts on a free main thread. Capped at 1.5s on slow connections.
+    let started = false;
+    const go = () => {
+      if (started || ac.signal.aborted) return;
+      started = true;
+      requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.add("hero-go")));
+    };
+    const loaded = document.readyState === "complete" ? null : new Promise((r) => window.addEventListener("load", r, { once: true, signal: ac.signal }));
+    Promise.all([document.fonts?.ready, loaded]).then(go);
+    const cap = setTimeout(go, 1500);
     return () => {
       document.documentElement.classList.remove("hero-go");
-      ac.abort(); ctx.revert();
-      document.getElementById("how")?.classList.remove("fx");
+      clearTimeout(cap); ac.abort(); ctx.revert();
+      qa(document, "#how").forEach((s) => s.classList.remove("fx")); // may already be hidden here
       document.body.classList.remove("grain");
       qa(document, ".wipe").forEach((s) => s.classList.remove("wipe"));
       qa(document, ".scn").forEach((s) => s.classList.remove("scn"));
       document.querySelector(".wipebg")?.remove();
     };
   }, []);
-  return null;
+  return <span ref={mark} hidden />;
 }
 
 // One fixed backdrop behind the page fades to each section's colour in place (no edge that scrolls),
 // then that section's content fades in a moment later: colour first, elements second.
 function wipeFx() {
-  const secs = qa(document, "#smooth-content section").filter((s) => s.offsetHeight); // skip hidden desktop/mobile twins
+  const secs = qa(page, "section").filter((s) => s.offsetHeight); // skip hidden desktop/mobile twins
   if (!secs.length) return;
   const body = getComputedStyle(document.body).backgroundColor;
   const cols = secs.map((s) => {
@@ -90,7 +106,7 @@ function wipeFx() {
 }
 
 function gapFx() {
-  const g = document.getElementById("gap");
+  const g = byId("gap");
   if (!g) return;
   // Desktop: the scene change holds #gap's content still while it fades in, so its children's scroll
   // positions are shifted and their triggers would fire at load. Trigger off the section itself instead:
@@ -108,7 +124,7 @@ function gapFx() {
 }
 
 function agentFx(mob: boolean) {
-  const g = document.getElementById("agent");
+  const g = byId("agent");
   if (!g) return;
   const st = qa(g, ".st"), ln = q(g, ".ln i"), dot = q(g, ".ln s"), ck = q(g, ".ck");
   const T = [0, 2, 41, 80, 82]; // seconds shown on the clock at each step
@@ -139,7 +155,7 @@ function agentFx(mob: boolean) {
 }
 
 function workFx(signal: AbortSignal) {
-  const sec = document.getElementById("work");
+  const sec = byId("work");
   if (!sec || document.documentElement.scrollHeight < innerHeight * 1.5) return;
   sec.classList.add("pinned");
   const panels = qa(sec, ".wp-panel"), btns = qa<HTMLButtonElement>(sec, ".wp-prog button");
@@ -228,7 +244,7 @@ function howStory(g: HTMLElement) {
 }
 
 function howFx(mob: boolean) {
-  const g = document.getElementById("how");
+  const g = byId("how");
   if (!g) return;
   if (!mob) { howStory(g); return; }
   const steps = qa(g, ".step");
