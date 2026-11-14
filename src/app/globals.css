@@ -699,8 +699,10 @@ body.grain::after{display:none}
 #agent,#how,#work.pinned{will-change:transform;backface-visibility:hidden}
 
 /* Touch screens: give small text links a 44px tap area (Apple/Google guideline) without changing how they look */
-@media (pointer: coarse) {
-  .hlinkrow a, .vfoot a { display: inline-flex; align-items: center; min-height: 44px; }
+@media (pointer: coarse), (max-width: 900px) {
+  .hlinkrow a, .vfoot a, .gc > a, a.lnk, a.arr, .vlogo, button[aria-label^="Share"], button[aria-label="Link copied"] { display: inline-flex; align-items: center; min-height: 44px; }
+  button[aria-label^="Share"], button[aria-label="Link copied"] { min-width: 44px; justify-content: center; }
+  .mailchip button { min-height: 44px; }
 }
 /* Keyboard users: one brand-coloured focus ring everywhere */
 a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid #FF6B1A; outline-offset: 3px; border-radius: 4px; }
