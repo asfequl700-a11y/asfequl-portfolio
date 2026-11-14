@@ -278,6 +278,7 @@ function howFx(mob: boolean) {
     const at = 0.8 + i * 0.9;
     tl.from(q(s, ".n"), { y: 20, opacity: 0, duration: 0.4, ease: "power3.out" }, at)
       .from(q(s, "h3"), { y: 20, opacity: 0, duration: 0.45, ease: "power3.out" }, at + 0.1)
+      .from(q(s, ".hwart"), { y: 20, scale: 0.85, opacity: 0, duration: 0.5, ease: "power3.out" }, at + 0.1) // sketch arrives with its text
       .from(qa(s, "li"), { y: 14, opacity: 0, duration: 0.4, ease: "power3.out", stagger: 0.1 }, at + 0.25);
   });
   ScrollTrigger.create({ animation: tl, trigger: g, start: "top 65%", refreshPriority: 1 }); // plays once

@@ -640,22 +640,17 @@ body.grain::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:
    so header and hero always change colour together */
 body:has(.wipebg) .vhead{background:transparent}
 /* How we'd work: line graphics on the left */
-#how .hwart{width:clamp(200px,24vw,320px);color:#FF6B1A}
+#how .hwart{width:clamp(200px,24vw,320px);color:#EEF1F8}
 #how .hwart svg{display:block;width:100%;height:auto;overflow:visible}
 #how .hk{display:block;margin-bottom:8px;font:600 15px var(--f-mono),monospace;color:#FF6B1A;letter-spacing:.08em}
-#how .ha-ring{animation:haPulse 1.6s ease-in-out infinite}
-#how .ha-pen{animation:haPen 2.4s ease-in-out infinite}
-#how .ha-b1,#how .ha-b2,#how .ha-b3{animation:haBlink 3s ease-in-out infinite}
-#how .ha-b2{animation-delay:.5s}#how .ha-b3{animation-delay:1s}
+/* sketch loop: each stroke draws in like a pen (in order, --d), holds, fades, redraws - same white ink as the hero doodles */
+#how .hwart .ha-sk{stroke-dasharray:1;stroke-dashoffset:1;animation:haDraw 6s ease-in-out infinite both;animation-delay:calc(var(--d,0) * .35s)}
+#how .ha-pen{transform-box:fill-box;transform-origin:30% 90%;animation:haPen 2.4s ease-in-out infinite}
 #how .ha-rocket{animation:haLift 2.2s ease-in-out infinite}
-#how .ha-flame{transform-origin:120px 128px;animation:haFlame .35s ease-in-out infinite alternate}
-#how .ha-star{animation:haPulse 2s ease-in-out infinite}
-@keyframes haPulse{50%{opacity:.25}}
-@keyframes haPen{50%{transform:translate(-10px,6px)}}
-@keyframes haBlink{0%,100%{opacity:1}50%{opacity:.35}}
-@keyframes haLift{50%{transform:translateY(-8px)}}
-@keyframes haFlame{to{transform:scaleY(1.3)}}
-@media (prefers-reduced-motion:reduce){#how .hwart *{animation:none!important}}
+@keyframes haDraw{0%{stroke-dashoffset:1;opacity:1}28%{stroke-dashoffset:0}82%{stroke-dashoffset:0;opacity:1}94%{stroke-dashoffset:0;opacity:0}100%{stroke-dashoffset:1;opacity:0}}
+@keyframes haPen{50%{transform:translate(-6px,4px) rotate(-3deg)}}
+@keyframes haLift{50%{transform:translateY(-6px)}}
+@media (prefers-reduced-motion:reduce){#how .hwart *{animation:none!important}#how .hwart .ha-sk{stroke-dashoffset:0}}
 #how .hs{grid-template-columns:auto 1fr auto}
 #how .hwart{width:clamp(180px,20vw,300px)}
 /* How we'd work: final summary as cards */
