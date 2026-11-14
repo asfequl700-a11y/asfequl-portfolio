@@ -880,3 +880,14 @@ body:has(.wipebg) .vhead{background:transparent}
   .v .fs.sec,.v .night.fs:not(.hero){padding:56px 0}
   .v .fs .final{padding-top:0}
 }
+
+/* Home work panels: proof screenshot gets its own grid box on phones/tablets (fills the empty slot),
+   and stays in the chart card's corner on desktop. */
+#work .wp-grid>.wp-proof{display:none}
+@media (max-width:900px){
+  .wp-main>.proof{display:none}
+  #work .wp-grid>.wp-proof{display:flex;padding:12px;justify-content:center}
+  .wp-proof .proof{position:static;width:100%;padding:8px}
+  .wp-proof .proof img{height:auto;aspect-ratio:16/10}
+  .wp-proof .proof span{font-size:13px}
+}

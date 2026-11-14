@@ -32,6 +32,8 @@ export function WorkPanels() {
               {c.stats.map((s) => (
                 <div key={s.label} className="wp-box"><b className="pcount">{s.value}</b><small>{s.label}</small></div>
               ))}
+              {/* Phones/tablets only: proof screenshot fills the empty grid slot next to the last stat */}
+              {c.proof && <div className="wp-box wp-proof"><Proof shot={c.proof} site={c.name} /></div>}
               <div className="wp-box wp-did">
                 <b className="pcount">{c.worth.value}</b><small>{c.worth.label}</small>
                 <a className="lnk" href={c.url} target="_blank" rel="noopener">Visit {c.host}<Ar /></a>
