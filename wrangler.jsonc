@@ -29,5 +29,17 @@
 		// Enable image optimization
 		// see https://opennext.js.org/cloudflare/howtos/image
 		"binding": "IMAGES"
-	}
+	},
+	// Blog: posts live in D1, uploaded images in R2
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "hellofahim-blog",
+			"database_id": "e1157a8a-c63f-4921-ab24-5ed82308ba2d",
+			"migrations_dir": "migrations"
+		}
+	],
+	"r2_buckets": [
+		{ "binding": "BLOG_IMAGES", "bucket_name": "hellofahim-blog-images" }
+	]
 }
