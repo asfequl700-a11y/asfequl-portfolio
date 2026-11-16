@@ -7,6 +7,14 @@
 		{ "pattern": "hellofahim.com", "custom_domain": true },
 		{ "pattern": "www.hellofahim.com", "custom_domain": true }
 	],
+	// No public *.workers.dev address: the only way in is hellofahim.com (behind Cloudflare Access for /admin)
+	"workers_dev": false,
+	"preview_urls": false,
+	// Not secrets: they only tell the site which Cloudflare Access app to trust for /admin logins
+	"vars": {
+		"ACCESS_TEAM_DOMAIN": "yellow-sound-44e6.cloudflareaccess.com",
+		"ACCESS_AUD": "b4f4b436e60cb074e9aae4d94d2688301e681b4e42f1a5fc15a228a03fb5057d"
+	},
 	"compatibility_date": "2026-11-14",
 	"compatibility_flags": [
 		"nodejs_compat",
