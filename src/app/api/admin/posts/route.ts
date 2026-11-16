@@ -7,7 +7,7 @@ export async function GET(req: Request) {
   const denied = await requireAdmin(req);
   if (denied) return denied;
   const posts = await adminList();
-  return Response.json(posts.map(({ slug, title, status, updated_at, published_at }) => ({ slug, title, status, updated_at, published_at })));
+  return Response.json(posts.map(({ slug, title, status, updated_at, published_at, topic }) => ({ slug, title, status, updated_at, published_at, topic })));
 }
 
 // Create or update a post (draft or published).
@@ -17,6 +17,6 @@ export async function POST(req: Request) {
   const json = await req.json().catch(() => null);
   const input = json && typeof json === "object" ? validSaveInput(json as Record<string, unknown>) : null;
   if (!input) return Response.json({ error: "Post data is not valid" }, { status: 400 });
-  await adminSave(input);
-  return Response.json({ ok: true, slug: input.slug });
+  const { unpinned } = await adminSave(input);
+  return Response.json({ ok: true, slug: input.slug, unpinned });
 }

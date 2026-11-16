@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Ar } from "./ui";
-import { vis } from "../lib/gsap";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Sheet,
@@ -22,7 +21,11 @@ const links = [
   ["/work", "Work"],
   ["/projects", "Projects"],
   ["/about", "About"],
+  ["/blog", "Blog"],
 ] as const;
+
+// "Blog" stays highlighted on a post page (/blog/...) too
+const isOn = (path: string, href: string) => path === href || (href === "/blog" && path.startsWith("/blog/"));
 
 // Pages whose top section is light in the mockups; the rest start dark.
 const lightPages = ["/services", "/about"];
@@ -32,18 +35,14 @@ export default function SiteHeader() {
   const onContact = path === "/contact";
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
-  // Fixed header: full width over the hero, then it gathers into one compact box once the hero has scrolled away
+  // Fixed header: full width at the very top, then it gathers into one compact box on the first scroll
   const [compact, setCompact] = useState(false);
   useEffect(() => {
     let raf = 0;
     const check = () => {
       raf = 0;
-      // phones/tablets: gather into the compact box on the very first scroll
-      if (window.matchMedia("(max-width: 900px)").matches) return setCompact(window.scrollY > 8);
-      const hero = vis("main section");
-      // half-screen: the same moment the home backdrop fades to the next section's colour, so the
-      // (transparent, light-text) full bar never sits on a cream background
-      setCompact(hero ? hero.getBoundingClientRect().bottom < window.innerHeight * 0.5 : window.scrollY > window.innerHeight * 0.5);
+      // every screen size: gather into the compact box on the very first scroll
+      setCompact(window.scrollY > 8);
     };
     const onScroll = () => {
       if (!raf) raf = requestAnimationFrame(check);
@@ -58,7 +57,7 @@ export default function SiteHeader() {
     };
   }, [path]);
   return (
-    <div className={cn("vhead", lightPages.includes(path) ? "light" : "night", compact && "compact")}>
+    <div className={cn("vhead", lightPages.includes(path) ? "light" : "night", path === "/blog" && "whitetop", compact && "compact")}>
       <header className="wrap vtop">
         <Link className="vlogo" href="/" onClick={close}>
           fahim<b>.</b>
@@ -70,9 +69,9 @@ export default function SiteHeader() {
               href={href}
               className={cn(
                 buttonVariants({ variant: "pill" }),
-                path === href && "on",
+                isOn(path, href) && "on",
               )}
-              aria-current={path === href ? "page" : undefined}
+              aria-current={isOn(path, href) ? "page" : undefined}
             >
               {label}
             </Link>
@@ -111,7 +110,7 @@ export default function SiteHeader() {
                 <Link
                   key={href}
                   href={href}
-                  className={path === href ? "on" : undefined}
+                  className={isOn(path, href) ? "on" : undefined}
                   onClick={close}
                 >
                   {label}
