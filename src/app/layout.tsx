@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Bricolage_Grotesque, Inter, JetBrains_Mono, Geist } from "next/font/google";
 import SiteHeader from "../components/SiteHeader";
 import PageTransition from "../components/PageTransition";
+import Analytics from "../components/Analytics";
 import { SiteFooter } from "../components/ui";
 import { site } from "../data/site";
 import { Toaster } from "@/components/ui/sonner";
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </div>
         {/* outside #smooth-wrapper: fixed elements inside the smooth-scroll transform would not stay put */}
         <Toaster theme="light" position="bottom-center" />
+        <Analytics />
       </body>
     </html>
   );
