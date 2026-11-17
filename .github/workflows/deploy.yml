@@ -1,0 +1,28 @@
+name: Check and deploy
+
+on:
+  push:
+    branches: [main]
+
+# One deploy at a time; a newer push cancels an older one that is still running.
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      # Build also type-checks. If lint or build fails, the deploy step never runs.
+      - run: npx opennextjs-cloudflare build
+      - run: npx opennextjs-cloudflare deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
