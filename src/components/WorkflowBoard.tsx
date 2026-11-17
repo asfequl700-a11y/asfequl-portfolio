@@ -49,7 +49,6 @@ export default function WorkflowBoard() {
       <div className="fb-bar">
         <i /><i /><i />
         <b>Content pipeline</b><span className="fb-tab on">Editor</span><span className="fb-tab">Executions</span>
-        <em><u />Active · example</em>
       </div>
       <div className="fb-scroll" tabIndex={0}>
         <div className="fb-canvas" aria-hidden="true">
@@ -76,7 +75,17 @@ export default function WorkflowBoard() {
           <span className="fb-lbl" style={{ left: 985, top: 130 }}>Human check</span>
         </div>
       </div>
-      <p className="fb-hint">Example workflow. Swipe the board to see all of it. I&apos;d build it around your channel.</p>
+      {/* Phones: the wide canvas is replaced by a short 4-step card */}
+      <div className="fb-mini" aria-hidden="true">
+        <ol className="lp-pipe">
+          <li><span className="lp-ico"><Clapperboard /></span><div><b>Video in</b><small>You upload it. It gets the transcript.</small></div></li>
+          <li><span className="lp-ico"><Bot /></span><div><b>AI agent</b><small>Reads it, decides what to make, calls its tools.</small></div><em className="fb-tag">AI agent</em></li>
+          <li><span className="lp-ico"><Scissors /></span><div><b>5 outputs, made for you</b><div className="fb-tags"><span>Shorts</span><span>Posts</span><span>Newsletter</span><span>Titles</span><span>Community post</span></div></div></li>
+          <li><span className="lp-ico"><UserCheck /></span><div><b>You approve, it publishes</b><small>Nothing goes out without you.</small></div></li>
+        </ol>
+        <p className="fb-mini-q"><Inbox aria-hidden="true" />Second flow: an enquiry agent answers questions about your offer and saves them to your sheet.</p>
+      </div>
+      <p className="fb-hint">Example workflow. I&apos;d build it around your channel.</p>
     </div>
   );
 }

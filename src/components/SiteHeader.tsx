@@ -44,7 +44,10 @@ export default function SiteHeader() {
   const onContact = path === "/contact";
   const [open, setOpen] = useState(false);
   // Services dropdown: state, not CSS :hover, so it closes after a click even if the mouse stays put
-  const [dd, setDd] = useState(false);  const close = () => setOpen(false);
+  const [dd, setDd] = useState(false);
+  // Mobile menu: the service pages fold under "Services" until you tap the arrow
+  const [svcOpen, setSvcOpen] = useState(false);
+  const close = () => setOpen(false);
   // Fixed header: full width at the very top, then it gathers into one compact box on the first scroll
   const [compact, setCompact] = useState(false);
   useEffect(() => {
@@ -137,10 +140,28 @@ export default function SiteHeader() {
             <nav className="snav" aria-label="Mobile">
               {links.map(([href, label]) => (
                 <Fragment key={href}>
-                  <Link href={href} className={isOn(path, href) ? "on" : undefined} onClick={close}>
-                    {label}
-                  </Link>
+                  {href === "/ai-automation-services" ? (
+                    <div className="snav-row">
+                      <Link href={href} className={inServices(path) ? "on" : undefined} onClick={close}>
+                        {label}
+                      </Link>
+                      <button
+                        type="button"
+                        className="snav-tog"
+                        aria-expanded={svcOpen}
+                        aria-label={svcOpen ? "Hide service pages" : "Show service pages"}
+                        onClick={() => setSvcOpen((v) => !v)}
+                      >
+                        <ChevronDown className={cn("vchev", svcOpen && "up")} aria-hidden="true" />
+                      </button>
+                    </div>
+                  ) : (
+                    <Link href={href} className={isOn(path, href) ? "on" : undefined} onClick={close}>
+                      {label}
+                    </Link>
+                  )}
                   {href === "/ai-automation-services" &&
+                    svcOpen &&
                     sub.slice(1).map(([h, l]) => (
                       <Link key={h} href={h} className={cn("subl", path === h && "on")} onClick={close}>
                         {l}
