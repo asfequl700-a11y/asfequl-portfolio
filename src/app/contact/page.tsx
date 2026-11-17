@@ -5,7 +5,7 @@ import ContactForm from "../../components/ContactForm";
 
 // Ported from _design/v4-Contact.dc.html
 export const metadata: Metadata = {
-  title: "Contact",
+  title: "Book a Free Call",
   description: "Tell me what your business does and where you lose customers. No pitch, just a plan. Email asfequl@hellofahim.com or send the form.",
   alternates: { canonical: "/contact" },
 };

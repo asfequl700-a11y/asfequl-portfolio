@@ -18,7 +18,7 @@ import { site } from "../data/site";
 
 const links = [
   ["/", "Home"],
-  ["/services", "Services"],
+  ["/ai-automation-services", "Services"],
   ["/work", "Work"],
   ["/projects", "Projects"],
   ["/about", "About"],
@@ -27,9 +27,9 @@ const links = [
 
 // Shown under Services (hover/focus on desktop, indented in the mobile menu)
 const sub = [
-  ["/services", "All services"],
-  ["/local", "For local businesses"],
-  ["/creators", "For YouTube creators"],
+  ["/ai-automation-services", "AI automation services"],
+  ["/ai-receptionist-for-small-business", "AI receptionist"],
+  ["/youtube-automation-for-creators", "YouTube automation"],
 ] as const;
 const inServices = (path: string) => sub.some(([h]) => h === path);
 
@@ -37,7 +37,7 @@ const inServices = (path: string) => sub.some(([h]) => h === path);
 const isOn = (path: string, href: string) => path === href || (href === "/blog" && path.startsWith("/blog/"));
 
 // Pages whose top section is light in the mockups; the rest start dark.
-const lightPages = ["/services", "/about"];
+const lightPages = ["/ai-automation-services", "/about"];
 
 export default function SiteHeader() {
   const path = usePathname();
@@ -74,7 +74,7 @@ export default function SiteHeader() {
         </Link>
         <nav className="vnav" aria-label="Main">
           {links.map(([href, label]) => {
-            const on = href === "/services" ? inServices(path) : isOn(path, href);
+            const on = href === "/ai-automation-services" ? inServices(path) : isOn(path, href);
             const link = (
               <Link
                 key={href}
@@ -83,10 +83,10 @@ export default function SiteHeader() {
                 aria-current={isOn(path, href) ? "page" : undefined}
               >
                 {label}
-                {href === "/services" && <ChevronDown className="vchev" aria-hidden="true" />}
+                {href === "/ai-automation-services" && <ChevronDown className="vchev" aria-hidden="true" />}
               </Link>
             );
-            if (href !== "/services") return link;
+            if (href !== "/ai-automation-services") return link;
             return (
               <div
                 key={href}
@@ -140,7 +140,7 @@ export default function SiteHeader() {
                   <Link href={href} className={isOn(path, href) ? "on" : undefined} onClick={close}>
                     {label}
                   </Link>
-                  {href === "/services" &&
+                  {href === "/ai-automation-services" &&
                     sub.slice(1).map(([h, l]) => (
                       <Link key={h} href={h} className={cn("subl", path === h && "on")} onClick={close}>
                         {l}

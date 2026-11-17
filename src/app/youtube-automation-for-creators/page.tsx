@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Lightbulb, PenLine, Scissors, Rocket, Inbox, ServerCog, Radar, ListFilter, AtSign, Send } from "lucide-react";
 import SiteFx from "../../components/SiteFx";
+import JsonLd, { faqSchema } from "../../components/JsonLd";
 import ContactForm from "../../components/ContactForm";
 import Shot from "../../components/Shot";
 import WorkflowBoard from "../../components/WorkflowBoard";
@@ -10,9 +11,9 @@ import { Ar } from "../../components/ui";
 import { buttonVariants } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Get your time back: automation for YouTube creators",
-  description: "Research, scripts, shorts and publishing eat the hours you could spend filming. I build the n8n and AI systems that do it for you, so you can make your next video.",
-  alternates: { canonical: "/creators" },
+  title: "YouTube Automation for Creators",
+  description: "YouTube automation for creators: AI video ideas, script drafts, shorts and publishing handled by n8n workflows, so you can make your next video.",
+  alternates: { canonical: "/youtube-automation-for-creators" },
 };
 
 const flow = [
@@ -30,9 +31,9 @@ const pains = [
 ];
 
 const builds = [
-  [Lightbulb, "Idea research feed", "Fresh video ideas delivered to you, based on your niche. No more scrolling for them.", true],
-  [PenLine, "Script first drafts", "Start from a draft in your voice, not a blank page.", true],
-  [Scissors, "Shorts and posts pipeline", "Long video in, shorts and social posts out, without you doing it by hand.", false],
+  [Lightbulb, "YouTube video ideas feed", "Fresh video ideas delivered to you, based on your niche. No more scrolling for them.", true],
+  [PenLine, "AI video script drafts", "Start from a draft in your voice, not a blank page.", true],
+  [Scissors, "Shorts and content repurposing", "Long video in, shorts and social posts out, without you doing it by hand.", false],
   [Rocket, "Publishing checklist", "Titles, thumbnails and scheduling done the same way every time. Nothing forgotten.", false],
   [Inbox, "Enquiry capture", "Questions about your course or coaching land in one place, ready to answer.", false],
   [ServerCog, "Hosted and kept running", "Built with n8n and AI. I host it and keep it working on a monthly plan.", false],
@@ -40,16 +41,40 @@ const builds = [
 
 const scout = [[Radar, "Scans YouTube channels"], [ListFilter, "Checks size, upload activity and offers"], [AtSign, "Finds contact details"], [Send, "Drafts the outreach for me to approve"]] as const;
 
+const faqs = [
+  [
+    "What can be automated on a YouTube channel?",
+    "Video idea research, script drafts, turning long videos into shorts and posts, publishing checklists and replies to enquiries about your course or coaching. We start with the one that eats most of your time."
+  ],
+  [
+    "How much time could I get back?",
+    "It depends on what you do by hand today. On the call we list your repeat tasks, and I tell you honestly which ones are worth automating."
+  ],
+  [
+    "How much does it cost?",
+    "Every channel is different, so there is no fixed price list. We talk first, then I send a quote that fits what you need."
+  ],
+  [
+    "Do I need to be technical?",
+    "No. I set it up, explain it in plain words and stay around after launch."
+  ],
+  [
+    "Can I start small?",
+    "Yes. We pick the one task that eats the most time and start there."
+  ]
+] as const;
+
 export default function CreatorsPage() {
   return (
     <div className="page lp">
       <SiteFx />
+      <JsonLd data={faqSchema(faqs)} />
 
       <section className="night lp-hero"><div className="wrap"><div className="lp-hgrid">
         <div>
-          <span className="kick">For YouTube creators who sell something</span>
+          <span className="kick">YouTube automation for creators who sell something</span>
           <h1>Stop the busywork.<br /><em>Make your next video.</em></h1>
-          <p className="lead muted">Research, scripts, shorts and publishing eat the hours you could spend filming. I build the systems that do them for you.</p>
+          <p className="lead muted">Research, scripts, shorts and publishing eat the hours you could spend filming. I build the n8n and AI systems that automate them for you.</p>
           <div className="lp-row">
             <a className={buttonVariants({ variant: "brandStill" })} href="#book">Get my hours back<Ar /></a>
             <a className={buttonVariants({ variant: "brandGhost" })} href="#how">See how it works<Ar /></a>
@@ -134,10 +159,7 @@ export default function CreatorsPage() {
         <span className="kick">Questions</span>
         <h2>Quick answers.</h2>
         <div className="faq">
-          <details><summary>How much time could I get back?</summary><p>It depends on what you do by hand today. On the call we list your repeat tasks, and I tell you honestly which ones are worth automating.</p></details>
-          <details><summary>How much does it cost?</summary><p>Every channel is different, so there is no fixed price list. We talk first, then I send a quote that fits what you need.</p></details>
-          <details><summary>Do I need to be technical?</summary><p>No. I set it up, explain it in plain words and stay around after launch.</p></details>
-          <details><summary>Can I start small?</summary><p>Yes. We pick the one task that eats the most time and start there.</p></details>
+          {faqs.map(([q, a]) => <details key={q}><summary>{q}</summary><p>{a}</p></details>)}
         </div>
       </div></section>
 

@@ -5,8 +5,8 @@ import { FinalCta } from "../../components/ui";
 
 // Ported from _design/v4-About.dc.html
 export const metadata: Metadata = {
-  title: "About",
-  description: "Hi, I’m Fahim from Comilla, Bangladesh. I’m an SEO specialist for a UK team (ryne.ai, humaniser.com, reilaa.com) and build n8n automations for small businesses.",
+  title: "About Fahim: AI Automation and Websites",
+  description: "I’m Fahim from Comilla, Bangladesh. I build n8n automations, AI agents and websites for small businesses, and I work with the UK team behind ryne.ai, humaniser.com and reilaa.com.",
   alternates: { canonical: "/about" },
 };
 

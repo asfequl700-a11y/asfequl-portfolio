@@ -1,4 +1,4 @@
-// The three service rows (animation + text), shared by /services and /local.
+// The three service rows (animation + text), shared by /ai-automation-services and /ai-receptionist-for-small-business.
 export function WebsiteRow() {
   return (
 <div className="srow"><div style={{ display: "flex", flexDirection: "column", gap: "18px" }}><span className="kick" style={{ margin: "0" }}>01 · Websites</span><h3 style={{ fontSize: "44px" }}>A website that makes the phone ring.</h3><p className="muted" style={{ fontSize: "18px" }}>For when people can&apos;t find you, or your site doesn&apos;t make them call.</p><ul className="ticks"><li>Fast on phones</li><li>Call and quote buttons where thumbs reach</li><li>Page titles and Google basics done</li></ul></div><div className="scene" style={{ background: "#E6EBFF", padding: "48px 36px 0" }} aria-label="Animation: a website builds itself, then a visitor taps Call now">

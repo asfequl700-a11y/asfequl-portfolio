@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Phone, PhoneMissed, Bot, ClipboardCheck, CalendarCheck, MessageSquare } from "lucide-react";
 import SiteFx from "../../components/SiteFx";
+import JsonLd, { faqSchema } from "../../components/JsonLd";
 import { WebsiteRow, ReceptionistRow, AgentsRow } from "../../components/ServiceRows";
 import Shot from "../../components/Shot";
 import { Testimonials } from "../../components/Testimonials";
@@ -9,9 +10,9 @@ import { FinalCta, Ar } from "../../components/ui";
 import { buttonVariants } from "@/components/ui/button";
 
 export const metadata: Metadata = {
-  title: "Stop missing calls: websites and AI receptionist for local businesses",
-  description: "You can't be on the job and by the phone at once. I build the website that makes the phone ring and the AI receptionist that answers it and books the job. For plumbers, electricians, clinics and more.",
-  alternates: { canonical: "/local" },
+  title: "AI Receptionist for Small Business",
+  description: "An AI receptionist that answers every call, books the job and texts you a summary, plus website design for small business. For plumbers, electricians and clinics.",
+  alternates: { canonical: "/ai-receptionist-for-small-business" },
 };
 
 const who = ["Plumbers", "Electricians", "Car painters", "Roofers", "Cleaners", "Clinics", "Salons"];
@@ -35,16 +36,48 @@ const steps = [
   ["Launch", "Live on your domain. Handover, and I stay on for fixes."],
 ];
 
+const faqs = [
+  [
+    "What is an AI receptionist?",
+    "An AI receptionist is software that answers your business calls, asks what the caller needs, books the job and sends you a summary. Mine is built with n8n and connects to your calendar."
+  ],
+  [
+    "Is this only for plumbers?",
+    "No. It fits any local business where a missed call is a lost job: plumbers, electricians, roofers, cleaners, clinics and salons. The website design and the AI receptionist are built around your trade."
+  ],
+  [
+    "How much time will this save me?",
+    "It depends on how many calls and enquiries you handle by hand today. On our call I ask about your week and tell you honestly what is worth automating."
+  ],
+  [
+    "How much does it cost?",
+    "Every business is different, so there is no fixed price list. We talk first, then I send a quote that fits what you need."
+  ],
+  [
+    "How long does it take?",
+    "It depends on the job. We agree on a timeline together after our call."
+  ],
+  [
+    "Do I need to be technical?",
+    "No. I set it up, explain it in plain words and stay around after launch."
+  ],
+  [
+    "Who is this not for?",
+    "Big companies with an IT team. I work best with small, busy businesses."
+  ]
+] as const;
+
 export default function LocalPage() {
   return (
     <div className="page lp">
       <SiteFx />
+      <JsonLd data={faqSchema(faqs)} />
 
       <section className="night lp-hero"><div className="wrap"><div className="lp-hgrid">
         <div>
-          <span className="kick">For local businesses</span>
+          <span className="kick">AI receptionist for small business</span>
           <h1>Don&apos;t lose jobs<br /><em>to missed calls.</em></h1>
-          <p className="lead muted">Missed calls are lost jobs, and you can&apos;t be on the job and by the phone at the same time. I build the website that makes the phone ring, and an AI receptionist that answers it, so you keep working and the jobs keep coming.</p>
+          <p className="lead muted">Missed calls are lost jobs, and you can&apos;t be on the job and by the phone at the same time. I build an AI receptionist that works as your answering service, plus the website design that makes the phone ring, so you keep working and the jobs keep coming.</p>
           <div className="lp-row">
             <Link className={buttonVariants({ variant: "brandStill" })} href="/contact">Get my calls answered<Ar /></Link>
             <a className={buttonVariants({ variant: "brandGhost" })} href="#missed">See a missed call handled<Ar /></a>
@@ -91,11 +124,7 @@ export default function LocalPage() {
         <span className="kick">Questions</span>
         <h2>Quick answers.</h2>
         <div className="faq">
-          <details><summary>How much time will this save me?</summary><p>It depends on how many calls and enquiries you handle by hand today. On our call I ask about your week and tell you honestly what is worth automating.</p></details>
-          <details><summary>How much does it cost?</summary><p>Every business is different, so there is no fixed price list. We talk first, then I send a quote that fits what you need.</p></details>
-          <details><summary>How long does it take?</summary><p>It depends on the job. We agree on a timeline together after our call.</p></details>
-          <details><summary>Do I need to be technical?</summary><p>No. I set it up, explain it in plain words and stay around after launch.</p></details>
-          <details><summary>Who is this not for?</summary><p>Big companies with an IT team. I work best with small, busy businesses.</p></details>
+          {faqs.map(([q, a]) => <details key={q}><summary>{q}</summary><p>{a}</p></details>)}
         </div>
       </div></section>
 

@@ -18,8 +18,8 @@ const mono = JetBrains_Mono({ variable: "--f-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: { default: "Fahim · Websites and AI automation for local businesses", template: "%s · Fahim" },
-  description: "I build websites that make the phone ring and AI helpers that answer calls, follow up leads and automate busy work with n8n.",
+  title: { default: "Fahim · AI automation and websites for small business", template: "%s · Fahim" },
+  description: "I build AI automation, AI receptionists and websites for small businesses and YouTube creators. n8n workflows that answer calls, follow up leads and save you hours.",
   openGraph: { siteName: "Fahim", type: "website", images: ["/profile.jpg"] },
 };
 

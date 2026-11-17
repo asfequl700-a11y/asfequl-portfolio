@@ -6,16 +6,16 @@ import { WebsiteRow, ReceptionistRow, AgentsRow } from "../../components/Service
 
 // Ported from _design/v4-Services.dc.html
 export const metadata: Metadata = {
-  title: "Services",
-  description: "Websites that make the phone ring, an AI receptionist that answers every call, and AI agents and automation for the boring jobs.",
-  alternates: { canonical: "/services" },
+  title: "AI Automation Services for Small Business",
+  description: "Custom AI agents, n8n workflow automation, an AI receptionist and websites for small business. Get hours back every week. Book a free call.",
+  alternates: { canonical: "/ai-automation-services" },
 };
 
 export default function ServicesPage() {
   return (
     <div className="page">
       <SiteFx />
-<section className="light"><div className="wrap"><div className="phero"><span className="kick">Services</span><h1>Pick the problem.<br />I&apos;ll fix it.</h1><p className="lead">Each service solves one way you lose customers. Start with the one that costs you most.</p></div></div></section><section style={{ paddingBottom: "90px" }}><div className="wrap"><WebsiteRow /><ReceptionistRow /><AgentsRow /></div></section>
+<section className="light"><div className="wrap"><div className="phero"><span className="kick">AI automation services</span><h1>Pick the problem.<br />I&apos;ll fix it.</h1><p className="lead">AI agents, workflow automation, an AI receptionist and websites for small business. Each one fixes a way you lose time or customers. Start with the one that costs you most.</p></div></div></section><section style={{ paddingBottom: "90px" }}><div className="wrap"><WebsiteRow /><ReceptionistRow /><AgentsRow /></div></section>
       <section className="sec"><div className="wrap">
         <span className="kick">Proof</span>
         <h2>Real workflows,<br />not mock-ups.</h2>

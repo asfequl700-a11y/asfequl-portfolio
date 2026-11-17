@@ -12,7 +12,7 @@ export async function sendEnquiry(formData: FormData): Promise<SendResult> {
   const name = String(formData.get("name") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
   const message = String(formData.get("message") ?? "").trim();
-  const channel = String(formData.get("channel") ?? "").trim().slice(0, 300); // only sent by the /creators form
+  const channel = String(formData.get("channel") ?? "").trim().slice(0, 300); // only sent by the /youtube-automation-for-creators form
 
   // Spam trap: real people never see or fill the "company" field; bots do. Pretend it worked.
   if (String(formData.get("company") ?? "")) return { ok: true };

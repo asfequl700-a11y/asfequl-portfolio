@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 
 // Ported from _design/v4-Projects.dc.html
 export const metadata: Metadata = {
-  title: "Projects",
+  title: "AI Automation Projects: n8n Agents",
   description:
     "AI agents I run with n8n (lead finder, research assistant, Medium watch, outreach sender) and hobby projects like ChessSite and Streamline.",
   alternates: { canonical: "/projects" },

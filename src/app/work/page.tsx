@@ -6,8 +6,8 @@ import { Testimonials } from "../../components/Testimonials";
 
 // Ported from _design/v4-Work.dc.html
 export const metadata: Metadata = {
-  title: "Work",
-  description: "SEO, website growth and day-to-day management for ryne.ai, humaniser.com and reilaa.com: what I did and what changed.",
+  title: "Work: Ryne AI, Humaniser and Reilaa",
+  description: "Website growth and day-to-day management for ryne.ai, humaniser.com and reilaa.com: what I did and what changed.",
   alternates: { canonical: "/work" },
 };
 
