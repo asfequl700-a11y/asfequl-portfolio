@@ -57,7 +57,7 @@ export default function SiteHeader() {
     };
   }, [path]);
   return (
-    <div className={cn("vhead", lightPages.includes(path) ? "light" : "night", path === "/blog" && "whitetop", compact && "compact")}>
+    <div className={cn("vhead", lightPages.includes(path) ? "light" : "night", path.startsWith("/blog") && "whitetop", compact && "compact")}>
       <header className="wrap vtop">
         <Link className="vlogo" href="/" onClick={close}>
           fahim<b>.</b>

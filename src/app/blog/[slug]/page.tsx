@@ -6,6 +6,8 @@ import PostArticle, { fmtDate, readMinutes } from "../../../components/PostArtic
 import { FinalCta } from "../../../components/ui";
 import { getPost, listPosts } from "@/lib/blog";
 import { site } from "../../../data/site";
+import Avatar from "../../../components/Avatar";
+import { resolveAuthor, shortName } from "@/lib/blog-shared";
 
 export const dynamic = "force-dynamic";
 
@@ -29,7 +31,7 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
       <SiteFx />
       <div className="post-page">
         <PostArticle title={post.title} description={post.description} blocks={post.body}
-          publishedAt={post.published_at} url={`${site.url}/blog/${post.slug}`} />
+          publishedAt={post.published_at} url={`${site.url}/blog/${post.slug}`} author={resolveAuthor(post.author_name, post.author_photo)} />
         {more.length > 0 && (
           <section className="post-more" aria-labelledby="more-h">
             <div className="post-more-head">
@@ -45,7 +47,7 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
                   </div>
                   <h3>{p.title}</h3>
                   <div className="cmeta">
-                    {fmtDate(p.published_at, true)}
+                    {(() => { const a = resolveAuthor(p.author_name, p.author_photo); return <><Avatar name={a.name} photo={a.photo} size={20} decorative />{shortName(a)} · </>; })()}{fmtDate(p.published_at, true)}
                     <span className="read">{readMinutes(p.body)} min</span>
                   </div>
                 </Link>

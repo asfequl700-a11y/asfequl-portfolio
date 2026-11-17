@@ -1,5 +1,5 @@
 import type { Block, Run } from "@/lib/blog-shared";
-import { safeHref } from "@/lib/blog-shared";
+import { safeHref, headingIds } from "@/lib/blog-shared";
 
 // One piece of a paragraph: plain, bold, italic and/or a link (React escapes all text, so no raw HTML).
 function RunView({ r }: { r: Run }) {
@@ -14,6 +14,7 @@ function RunView({ r }: { r: Run }) {
 
 // Draws each block. A new block type = one new case here (+ the Block type in lib/blog.ts).
 export default function BlogBlocks({ blocks }: { blocks: Block[] }) {
+  const ids = headingIds(blocks);
   return (
     <div className="blog-body">
       {blocks.map((b, i) => {
@@ -21,7 +22,7 @@ export default function BlogBlocks({ blocks }: { blocks: Block[] }) {
           case "heading":
             // The post title is the page's only H1, so a "big heading" is an h2 that looks bigger (better for Google).
             if (b.level === 3) return <h3 key={i}>{b.text}</h3>;
-            return <h2 key={i} className={b.level === 1 ? "blog-h1" : undefined}>{b.text}</h2>;
+            return <h2 key={i} id={ids.get(i)} className={b.level === 1 ? "blog-h1" : undefined}>{b.text}</h2>;
           case "quote":
             return <blockquote key={i}>{b.text}</blockquote>;
           case "divider":

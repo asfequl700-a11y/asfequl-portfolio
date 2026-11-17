@@ -17,6 +17,35 @@ export type Block =
 export const safeHref = (h: unknown): h is string => typeof h === "string" && h.length <= 2000 && /^(https?:\/\/|\/|mailto:|#)/.test(h);
 export const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
+// Link names for the H2 headings ("big heading" and "heading"), used by the post and its "This article covers" list.
+// Same words twice get -2, -3 so every link is unique. Returns block index -> id.
+export function headingIds(blocks: Block[]): Map<number, string> {
+  const ids = new Map<number, string>();
+  const used = new Map<string, number>();
+  blocks.forEach((b, i) => {
+    if (b.type !== "heading" || b.level === 3) return;
+    const base = b.text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60) || "section";
+    const n = (used.get(base) ?? 0) + 1;
+    used.set(base, n);
+    ids.set(i, n === 1 ? base : `${base}-${n}`);
+  });
+  return ids;
+}
+
+// Authors. A post stores author_name "" for the default author (Fahim, with the profile photo); anyone else by name + optional photo.
+export type Author = { name: string; photo: string | null };
+export const DEFAULT_AUTHOR = { name: "Asfequl Alam Fahim", short: "Fahim", photo: "/profile.jpg" };
+export const resolveAuthor = (name: string, photo: string | null): Author =>
+  name ? { name, photo } : { name: DEFAULT_AUTHOR.name, photo: DEFAULT_AUTHOR.photo };
+export const shortName = (a: Author) => (a.name === DEFAULT_AUTHOR.name ? DEFAULT_AUTHOR.short : a.name);
+export const initials = (name: string) => name.trim().split(/\s+/).slice(0, 2).map((w) => w[0]?.toUpperCase() ?? "").join("");
+// An author name: 1-60 letters, numbers, spaces and & ' . - ("" = the default author)
+export const cleanAuthor = (t: unknown): string | null => {
+  if (typeof t !== "string") return null;
+  const v = t.trim().replace(/\s+/g, " ");
+  return v === "" || (v.length <= 60 && /^[\p{L}\p{N} &'.-]+$/u.test(v)) ? v : null;
+};
+
 // Starter topics. New ones are made in the editor ("+ New topic…") and are stored on the post itself.
 export const TOPICS = ["Websites", "AI receptionist", "Automation", "Notes"] as const;
 // A topic name: 1-40 letters, numbers, spaces and & ' - . (blocks odd characters; "" = no topic)

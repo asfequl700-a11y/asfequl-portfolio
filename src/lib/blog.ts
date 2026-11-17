@@ -1,7 +1,7 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 import type { Block, Run } from "./blog-shared";
-import { safeHref, SLUG_RE, cleanTopic } from "./blog-shared";
+import { safeHref, SLUG_RE, cleanTopic, cleanAuthor } from "./blog-shared";
 export type { Block, Run };
 export { safeHref, SLUG_RE };
 
@@ -14,6 +14,8 @@ export type Post = {
   published_at: string | null;
   topic: string;
   featured: number;
+  author_name: string;
+  author_photo: string | null;
 };
 
 export type AdminPost = Post & { status: "draft" | "published"; updated_at: string };
@@ -21,7 +23,7 @@ export type AdminPost = Post & { status: "draft" | "published"; updated_at: stri
 type Row = Omit<AdminPost, "body"> & { body: string };
 
 const db = () => getCloudflareContext().env.DB;
-const COLS = "slug,title,description,cover,body,status,published_at,updated_at,topic,featured";
+const COLS = "slug,title,description,cover,body,status,published_at,updated_at,topic,featured,author_name,author_photo";
 
 
 const str = (x: unknown, max: number, min = 0): x is string => typeof x === "string" && x.length >= min && x.length <= max;
@@ -108,7 +110,7 @@ export async function adminGet(slug: string): Promise<AdminPost | null> {
   return r ? parse(r) : null;
 }
 
-export type SaveInput = { slug: string; title: string; description: string; cover: string | null; body: Block[]; status: "draft" | "published"; topic: string; featured: number };
+export type SaveInput = { slug: string; title: string; description: string; cover: string | null; body: Block[]; status: "draft" | "published"; topic: string; featured: number; author_name: string; author_photo: string | null };
 
 // Insert or update by slug. published_at is set the first time a post is published and then kept.
 // A spot at the top belongs to one post only: taking it frees it from the post that had it (returned so the editor can say so).
@@ -122,15 +124,15 @@ export async function adminSave(p: SaveInput): Promise<{ unpinned: string | null
     db().prepare("UPDATE posts SET featured=0 WHERE featured=? AND featured<>0 AND slug<>?").bind(p.featured, p.slug),
     db()
       .prepare(
-        `INSERT INTO posts (slug,title,description,cover,body,status,published_at,topic,featured)
-         VALUES (?1,?2,?3,?4,?5,?6, CASE WHEN ?6='published' THEN datetime('now') END, ?7, ?8)
+        `INSERT INTO posts (slug,title,description,cover,body,status,published_at,topic,featured,author_name,author_photo)
+         VALUES (?1,?2,?3,?4,?5,?6, CASE WHEN ?6='published' THEN datetime('now') END, ?7, ?8, ?9, ?10)
          ON CONFLICT(slug) DO UPDATE SET
            title=excluded.title, description=excluded.description, cover=excluded.cover, body=excluded.body, status=excluded.status,
-           topic=excluded.topic, featured=excluded.featured,
+           topic=excluded.topic, featured=excluded.featured, author_name=excluded.author_name, author_photo=excluded.author_photo,
            published_at=CASE WHEN excluded.status='published' AND posts.published_at IS NULL THEN datetime('now') ELSE posts.published_at END,
            updated_at=datetime('now')`,
       )
-      .bind(p.slug, p.title, p.description, p.cover, JSON.stringify(p.body), p.status, p.topic, p.featured),
+      .bind(p.slug, p.title, p.description, p.cover, JSON.stringify(p.body), p.status, p.topic, p.featured, p.author_name, p.author_photo),
   ]);
   return { unpinned };
 }
@@ -148,5 +150,9 @@ export const validSaveInput = (x: Record<string, unknown>): SaveInput | null => 
   if (topic === null) return null;
   const featured = x.featured ?? 0;
   if (featured !== 0 && featured !== 1 && featured !== 2 && featured !== 3) return null;
-  return { slug: x.slug, title: x.title, description: x.description, cover: (x.cover as string | null) ?? null, body, status: x.status, topic, featured };
+  const author_name = cleanAuthor(x.author_name ?? "");
+  if (author_name === null) return null;
+  if (x.author_photo != null && !mediaOrHttp(x.author_photo)) return null;
+  const author_photo = author_name ? ((x.author_photo as string | null) ?? null) : null; // the default author always uses the profile photo
+  return { slug: x.slug, title: x.title, description: x.description, cover: (x.cover as string | null) ?? null, body, status: x.status, topic, featured, author_name, author_photo };
 };

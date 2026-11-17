@@ -137,3 +137,6 @@ html:has(.ed),body:has(.ed){overflow:hidden}
 .ed-prev-bar{position:sticky;top:0;z-index:5;background:#FF6B1A;color:#10162F;font-size:13px;font-weight:600;text-align:center;padding:8px 12px}
 .ed-prev-toggle{display:inline-flex;align-items:center;justify-content:center;gap:8px}
 .ed-prev-toggle.on{background:#FF6B1A;border-color:#FF6B1A;color:#10162F}
+
+.ed-drop-sm{min-height:110px}
+.ed-img-sm{width:96px;height:96px;border-radius:50%;object-fit:cover;display:block}

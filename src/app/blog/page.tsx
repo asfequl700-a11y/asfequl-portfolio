@@ -4,7 +4,7 @@ import { FinalCta } from "../../components/ui";
 import BlogIndex, { type Card } from "../../components/BlogIndex";
 import { readMinutes } from "../../components/PostArticle";
 import { listPosts, type Post } from "@/lib/blog";
-import { sortTopics } from "@/lib/blog-shared";
+import { sortTopics, resolveAuthor } from "@/lib/blog-shared";
 
 export const dynamic = "force-dynamic"; // posts come from the database, show new ones right away
 
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 const toCard = (p: Post): Card => ({
   slug: p.slug, title: p.title, description: p.description, cover: p.cover, topic: p.topic,
-  date: p.published_at ?? "", mins: readMinutes(p.body),
+  date: p.published_at ?? "", mins: readMinutes(p.body), author: resolveAuthor(p.author_name, p.author_photo),
 });
 
 // Top 3: a pinned post takes its spot (1 big, 2 and 3 small); empty spots get the newest posts that are not pinned.

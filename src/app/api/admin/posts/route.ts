@@ -7,7 +7,7 @@ export async function GET(req: Request) {
   const denied = await requireAdmin(req);
   if (denied) return denied;
   const posts = await adminList();
-  return Response.json(posts.map(({ slug, title, status, updated_at, published_at, topic }) => ({ slug, title, status, updated_at, published_at, topic })));
+  return Response.json(posts.map(({ slug, title, status, updated_at, published_at, topic, author_name, author_photo }) => ({ slug, title, status, updated_at, published_at, topic, author_name, author_photo })));
 }
 
 // Create or update a post (draft or published).

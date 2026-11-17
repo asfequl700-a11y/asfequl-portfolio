@@ -3,7 +3,7 @@ import "./editor.css";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { safeHref, SLUG_RE, TOPICS, FEATURED_LABELS, cleanTopic, sortTopics, type Block, type Run } from "@/lib/blog-shared";
+import { safeHref, SLUG_RE, TOPICS, FEATURED_LABELS, cleanTopic, sortTopics, cleanAuthor, resolveAuthor, DEFAULT_AUTHOR, type Block, type Run } from "@/lib/blog-shared";
 import PostArticle from "@/components/PostArticle";
 import { FinalCta } from "@/components/ui";
 
@@ -156,7 +156,7 @@ const UploadIcon = () => (
 );
 
 // Click to choose, or drop a photo on it. autoPick opens the file window right away (used when an Image block is added).
-function ImageDrop({ src, onPick, autoPick, title, hint, cover }: { src: string | null; onPick: (s: string | null) => void; autoPick?: boolean; title: string; hint: string; cover?: boolean }) {
+function ImageDrop({ src, onPick, autoPick, title, hint, cover, small }: { src: string | null; onPick: (s: string | null) => void; autoPick?: boolean; title: string; hint: string; cover?: boolean; small?: boolean }) {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const inp = useRef<HTMLInputElement>(null);
@@ -176,7 +176,7 @@ function ImageDrop({ src, onPick, autoPick, title, hint, cover }: { src: string 
   const onDrop = (e: React.DragEvent) => { if (!e.dataTransfer.files.length) return; e.preventDefault(); pick(e.dataTransfer.files[0]); };
   if (!src)
     return (
-      <label className={`ed-drop ${cover ? "ed-cover" : ""}`} onDragOver={onDragOver} onDrop={onDrop}>
+      <label className={`ed-drop ${cover ? "ed-cover" : ""} ${small ? "ed-drop-sm" : ""}`} onDragOver={onDragOver} onDrop={onDrop}>
         {input}
         <UploadIcon />
         <span className="font-semibold text-white">{busy ? "Uploading…" : title}</span>
@@ -187,7 +187,7 @@ function ImageDrop({ src, onPick, autoPick, title, hint, cover }: { src: string 
   return (
     <div className="flex flex-col gap-2.5" onDragOver={onDragOver} onDrop={onDrop}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt="" className={cover ? "ed-cover-img" : "ed-img"} />
+      <img src={src} alt="" className={cover ? "ed-cover-img" : small ? "ed-img-sm" : "ed-img"} />
       <div className="flex flex-wrap items-center gap-2">
         <label className="ed-btn ed-btn-sm">{busy ? "Uploading…" : "Change"}{input}</label>
         <button type="button" className="ed-btn ed-btn-sm" onClick={() => onPick(null)}>Remove</button>
@@ -242,6 +242,10 @@ export default function PostEditor({ slug: editSlug }: { slug?: string }) {
   const [topic, setTopic] = useState("");
   const [knownTopics, setKnownTopics] = useState<string[]>([...TOPICS]); // starter topics + any used on other posts
   const [newTopic, setNewTopic] = useState<string | null>(null); // typing a new topic name
+  const [authorName, setAuthorName] = useState(""); // "" = the default author (Fahim)
+  const [authorPhoto, setAuthorPhoto] = useState<string | null>(null);
+  const [authors, setAuthors] = useState<Record<string, string | null>>({}); // other authors used on other posts: name -> photo
+  const [newAuthor, setNewAuthor] = useState<{ name: string; photo: string | null } | null>(null); // adding a new author
   const [featured, setFeatured] = useState(0);
   const [cover, setCover] = useState<string | null>(null);
   const [status, setStatus] = useState<"draft" | "published">("draft");
@@ -274,7 +278,7 @@ export default function PostEditor({ slug: editSlug }: { slug?: string }) {
   });
 
   // "has anything changed since the last save?" (warns before you leave, shows the status)
-  const snap = JSON.stringify({ title, slug, description, cover, topic, featured, blocks: blocks.map((b) => ({ ...b, k: "" })) }); // keys ignored: in dev the post loads twice with new keys
+  const snap = JSON.stringify({ title, slug, description, cover, topic, featured, authorName, authorPhoto, blocks: blocks.map((b) => ({ ...b, k: "" })) }); // keys ignored: in dev the post loads twice with new keys
   const dirty = savedSnap !== null && snap !== savedSnap;
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { if (loaded && savedSnap === null) setSavedSnap(snap); }, [loaded, savedSnap, snap]);
@@ -288,7 +292,14 @@ export default function PostEditor({ slug: editSlug }: { slug?: string }) {
   useEffect(() => {
     fetch("/api/admin/posts")
       .then((r) => (r.ok ? r.json() : []))
-      .then((ps: { topic?: string }[]) => setKnownTopics((k) => sortTopics([...k, ...ps.map((p) => p.topic ?? "")])))
+      .then((ps: { topic?: string; author_name?: string; author_photo?: string | null }[]) => {
+        setKnownTopics((k) => sortTopics([...k, ...ps.map((p) => p.topic ?? "")]));
+        setAuthors((a) => {
+          const m = { ...a };
+          for (const p of ps) if (p.author_name && (m[p.author_name] == null)) m[p.author_name] = p.author_photo ?? null;
+          return m;
+        });
+      })
       .catch(() => {});
   }, []);
 
@@ -297,7 +308,7 @@ export default function PostEditor({ slug: editSlug }: { slug?: string }) {
     fetch(`/api/admin/posts/${editSlug}`)
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((p) => {
-        setTitle(p.title); setDescription(p.description); setTopic(p.topic ?? ""); setFeatured(p.featured ?? 0); setCover(p.cover); setStatus(p.status);
+        setTitle(p.title); setDescription(p.description); setTopic(p.topic ?? ""); setFeatured(p.featured ?? 0); setAuthorName(p.author_name ?? ""); setAuthorPhoto(p.author_photo ?? null); setCover(p.cover); setStatus(p.status);
         setBlocks((p.body as Block[]).map((b) => ({ ...b, k: newId() })));
         setLoaded(true);
       })
@@ -318,6 +329,20 @@ export default function PostEditor({ slug: editSlug }: { slug?: string }) {
     setKnownTopics((k) => sortTopics([...k, same ?? t]));
     setTopic(same ?? t);
     setNewTopic(null);
+  }
+
+  // "+ New author…": checks the name, remembers the photo and picks them for this post
+  function addAuthor() {
+    const n = cleanAuthor(newAuthor?.name ?? "");
+    if (!n) return showTip("An author name can use letters, numbers, spaces and & ' - . (up to 60 characters).");
+    if (n.toLowerCase() === DEFAULT_AUTHOR.name.toLowerCase()) { setAuthorName(""); setAuthorPhoto(null); setNewAuthor(null); return; } // that is the default author
+    const same = Object.keys(authors).find((k) => k.toLowerCase() === n.toLowerCase());
+    const name = same ?? n;
+    const photo = newAuthor?.photo ?? (same ? authors[same] : null);
+    setAuthors((a) => ({ ...a, [name]: photo }));
+    setAuthorName(name);
+    setAuthorPhoto(photo);
+    setNewAuthor(null);
   }
 
   // ---- block changes ----
@@ -452,7 +477,7 @@ export default function PostEditor({ slug: editSlug }: { slug?: string }) {
     const r = await fetch("/api/admin/posts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ slug, title: title.trim(), description: description.trim(), cover, body, status: to, topic, featured }),
+      body: JSON.stringify({ slug, title: title.trim(), description: description.trim(), cover, body, status: to, topic, featured, author_name: authorName, author_photo: authorName ? authorPhoto : null }),
     });
     setBusy(false);
     if (!r.ok) return setMsg({ ok: false, text: "Could not save. Check the title, links and images." });
@@ -539,7 +564,7 @@ export default function PostEditor({ slug: editSlug }: { slug?: string }) {
           <div className="page">
             <div className="post-page">
               <PostArticle title={title || "Post title"} description={description} blocks={previewBlocks}
-                publishedAt={null} url={`https://hellofahim.com/blog/${slug || "your-post"}`} />
+                publishedAt={null} url={`https://hellofahim.com/blog/${slug || "your-post"}`} author={resolveAuthor(authorName, authorPhoto)} />
             </div>
             <FinalCta title={<>Want this for<br />your business?</>} />
           </div>
@@ -752,6 +777,29 @@ export default function PostEditor({ slug: editSlug }: { slug?: string }) {
               </div>
             </div>
             <span className="ed-hint -mt-2">Topic = the tab it shows under on /blog. Top spot: each spot holds one post; empty spots show your newest posts.</span>
+            <div className="flex flex-col gap-1.5">
+              <label className="ed-label" htmlFor="ed-author">Author</label>
+              {newAuthor === null ? (
+                <select id="ed-author" className="ed-inp" value={authorName}
+                  onChange={(e) => { const v = e.target.value; if (v === "__new__") setNewAuthor({ name: "", photo: null }); else { setAuthorName(v); setAuthorPhoto(v ? authors[v] ?? null : null); } }}>
+                  <option value="">{DEFAULT_AUTHOR.name}</option>
+                  {Object.keys({ ...authors, ...(authorName ? { [authorName]: 1 } : {}) }).sort((a, b) => a.localeCompare(b)).map((n) => <option key={n} value={n}>{n}</option>)}
+                  <option value="__new__">+ New author…</option>
+                </select>
+              ) : (
+                <div className="flex flex-col gap-2.5">
+                  <input id="ed-author" className="ed-inp" autoFocus maxLength={60} placeholder="Author name" value={newAuthor.name}
+                    onChange={(e) => setNewAuthor({ ...newAuthor, name: e.target.value })}
+                    onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addAuthor(); } if (e.key === "Escape") setNewAuthor(null); }} />
+                  <ImageDrop small src={newAuthor.photo} onPick={(photo) => setNewAuthor({ ...newAuthor, photo })} title="Add a photo (optional)" hint="Without a photo, a badge with their initials shows." />
+                  <div className="flex gap-2">
+                    <button type="button" className="ed-btn ed-btn-sm ed-btn-main" onClick={addAuthor}>Add</button>
+                    <button type="button" className="ed-btn ed-btn-sm" onClick={() => setNewAuthor(null)}>Cancel</button>
+                  </div>
+                </div>
+              )}
+              <span className="ed-hint">Shown on the post and on the blog list. Posts keep one author each.</span>
+            </div>
             <div className="flex flex-col gap-1.5">
               <label className="ed-label" htmlFor="ed-desc">Short description for Google</label>
               <textarea id="ed-desc" className="ed-inp" rows={4} value={description} placeholder="One or two sentences that make people want to click." onChange={(e) => setDescription(e.target.value)} />

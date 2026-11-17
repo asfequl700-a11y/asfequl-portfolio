@@ -1,8 +1,10 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
+import Avatar from "./Avatar";
+import { shortName, type Author } from "@/lib/blog-shared";
 
-export type Card = { slug: string; title: string; description: string; cover: string | null; topic: string; date: string; mins: number };
+export type Card = { slug: string; title: string; description: string; cover: string | null; topic: string; date: string; mins: number; author: Author };
 
 const GRID = 6; // cover cards under the top 3
 const STEP = 10; // older posts shown per "Load more"
@@ -21,9 +23,8 @@ function Pic({ p, className }: { p: Card; className?: string }) {
 function Meta({ p, author }: { p: Card; author?: boolean }) {
   return (
     <div className="bl-meta">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      {author && <img src="/profile.jpg" alt="" width={22} height={22} />}
-      {author ? "Fahim · " : ""}{short(p.date)}
+      {author && <Avatar name={p.author.name} photo={p.author.photo} size={22} decorative />}
+      {author ? `${shortName(p.author)} · ` : ""}{short(p.date)}
       <span className="bl-mins">{p.mins} min</span>
     </div>
   );
