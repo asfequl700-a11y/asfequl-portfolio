@@ -5,7 +5,7 @@ import { listPosts } from "@/lib/blog";
 export const dynamic = "force-dynamic"; // blog posts come from the database
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const pages: MetadataRoute.Sitemap = ["", "/services", "/work", "/projects", "/about", "/contact", "/blog"].map((p) => ({
+  const pages: MetadataRoute.Sitemap = ["", "/services", "/local", "/creators", "/work", "/projects", "/about", "/contact", "/blog"].map((p) => ({
     url: site.url + p,
     changeFrequency: "monthly",
     priority: p ? 0.8 : 1,

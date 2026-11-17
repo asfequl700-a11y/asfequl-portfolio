@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
+import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Ar } from "./ui";
@@ -24,6 +25,14 @@ const links = [
   ["/blog", "Blog"],
 ] as const;
 
+// Shown under Services (hover/focus on desktop, indented in the mobile menu)
+const sub = [
+  ["/services", "All services"],
+  ["/local", "For local businesses"],
+  ["/creators", "For YouTube creators"],
+] as const;
+const inServices = (path: string) => sub.some(([h]) => h === path);
+
 // "Blog" stays highlighted on a post page (/blog/...) too
 const isOn = (path: string, href: string) => path === href || (href === "/blog" && path.startsWith("/blog/"));
 
@@ -34,7 +43,8 @@ export default function SiteHeader() {
   const path = usePathname();
   const onContact = path === "/contact";
   const [open, setOpen] = useState(false);
-  const close = () => setOpen(false);
+  // Services dropdown: state, not CSS :hover, so it closes after a click even if the mouse stays put
+  const [dd, setDd] = useState(false);  const close = () => setOpen(false);
   // Fixed header: full width at the very top, then it gathers into one compact box on the first scroll
   const [compact, setCompact] = useState(false);
   useEffect(() => {
@@ -63,19 +73,38 @@ export default function SiteHeader() {
           fahim<b>.</b>
         </Link>
         <nav className="vnav" aria-label="Main">
-          {links.map(([href, label]) => (
-            <Link
-              key={href}
-              href={href}
-              className={cn(
-                buttonVariants({ variant: "pill" }),
-                isOn(path, href) && "on",
-              )}
-              aria-current={isOn(path, href) ? "page" : undefined}
-            >
-              {label}
-            </Link>
-          ))}
+          {links.map(([href, label]) => {
+            const on = href === "/services" ? inServices(path) : isOn(path, href);
+            const link = (
+              <Link
+                key={href}
+                href={href}
+                className={cn(buttonVariants({ variant: "pill" }), on && "on")}
+                aria-current={isOn(path, href) ? "page" : undefined}
+              >
+                {label}
+                {href === "/services" && <ChevronDown className="vchev" aria-hidden="true" />}
+              </Link>
+            );
+            if (href !== "/services") return link;
+            return (
+              <div
+                key={href}
+                className={cn("vdrop", dd && "open")}
+                onMouseEnter={() => setDd(true)}
+                onMouseLeave={() => setDd(false)}
+                onFocus={() => setDd(true)}
+                onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setDd(false); }}
+              >
+                {link}
+                <div className="vmenu">
+                  {sub.map(([h, l]) => (
+                    <Link key={h} href={h} className={path === h ? "on" : undefined} onClick={() => setDd(false)}>{l}</Link>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </nav>
         {onContact ? (
           // Already on the form: offer the direct email instead of a link back to this page
@@ -107,14 +136,17 @@ export default function SiteHeader() {
             <SheetTitle className="sr-only">Menu</SheetTitle>
             <nav className="snav" aria-label="Mobile">
               {links.map(([href, label]) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className={isOn(path, href) ? "on" : undefined}
-                  onClick={close}
-                >
-                  {label}
-                </Link>
+                <Fragment key={href}>
+                  <Link href={href} className={isOn(path, href) ? "on" : undefined} onClick={close}>
+                    {label}
+                  </Link>
+                  {href === "/services" &&
+                    sub.slice(1).map(([h, l]) => (
+                      <Link key={h} href={h} className={cn("subl", path === h && "on")} onClick={close}>
+                        {l}
+                      </Link>
+                    ))}
+                </Fragment>
               ))}
             </nav>
             <Separator className="my-2" />

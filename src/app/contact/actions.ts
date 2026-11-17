@@ -12,6 +12,7 @@ export async function sendEnquiry(formData: FormData): Promise<SendResult> {
   const name = String(formData.get("name") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
   const message = String(formData.get("message") ?? "").trim();
+  const channel = String(formData.get("channel") ?? "").trim().slice(0, 300); // only sent by the /creators form
 
   // Spam trap: real people never see or fill the "company" field; bots do. Pretend it worked.
   if (String(formData.get("company") ?? "")) return { ok: true };
@@ -28,7 +29,7 @@ export async function sendEnquiry(formData: FormData): Promise<SendResult> {
     to: site.email,
     replyTo: email,
     subject: `New enquiry from ${name}`,
-    text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
+    text: `Name: ${name}\nEmail: ${email}${channel ? `\nChannel: ${channel}` : ""}\n\n${message}`,
   });
 
   if (error) {
