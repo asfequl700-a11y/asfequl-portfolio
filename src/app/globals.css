@@ -992,7 +992,7 @@ input,textarea,select,[contenteditable=true]{-webkit-user-select:text;user-selec
 .blog-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:12px}
 
 /* ---- blog post page (design approved in the mockup 2026-11-17): one 680px reading column ---- */
-.post-page{background:#F5F3EF;color:#101935;padding:56px max(16px,env(safe-area-inset-left,0px)) 40px}
+.post-page{background:#F5F3EF;color:#101935;padding:56px max(16px,env(safe-area-inset-left,0px)) 120px} /* bottom: the navy footer overlaps the last 64px */
 .post-col{max-width:680px;margin:0 auto}
 .post-crumb{display:flex;gap:10px;align-items:center;font:500 12px var(--f-mono),monospace;letter-spacing:.08em;text-transform:uppercase;color:#5A6380}
 .post-crumb a:hover{color:#FF6B1A}
@@ -1162,3 +1162,4 @@ section.night:has(> .final){border-radius:120px 120px 0 0/64px 64px 0 0;margin-t
   .toc-fold{display:none}
 }
 @media (prefers-reduced-motion:no-preference){html:has(.post){scroll-behavior:smooth}}
+@media (max-width:900px){.post-page{padding-bottom:88px}}

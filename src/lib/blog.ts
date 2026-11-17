@@ -94,7 +94,7 @@ export async function listPosts(): Promise<Post[]> {
   return results.map(parse);
 }
 
-export async function getPost(slug: string): Promise<Post | null> {
+export async function getPost(slug: string): Promise<AdminPost | null> {
   const r = await db().prepare(`SELECT ${COLS} FROM posts WHERE slug=? AND status='published'`).bind(slug).first<Row>();
   return r ? parse(r) : null;
 }

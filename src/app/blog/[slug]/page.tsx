@@ -7,27 +7,56 @@ import { FinalCta } from "../../../components/ui";
 import { getPost, listPosts } from "@/lib/blog";
 import { site } from "../../../data/site";
 import Avatar from "../../../components/Avatar";
-import { resolveAuthor, shortName } from "@/lib/blog-shared";
+import { resolveAuthor, shortName, autoDescription } from "@/lib/blog-shared";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: PageProps<"/blog/[slug]">): Promise<Metadata> {
   const post = await getPost((await params).slug);
   if (!post) return {};
+  const description = post.description || autoDescription(post.body);
   return {
     title: post.title,
-    description: post.description,
+    description,
     alternates: { canonical: `/blog/${post.slug}` },
-    openGraph: { type: "article", title: post.title, description: post.description, images: [post.cover ?? "/profile.jpg"] },
+    openGraph: {
+      type: "article", url: `/blog/${post.slug}`, title: post.title, description, images: [post.cover ?? "/profile.jpg"],
+      publishedTime: post.published_at ? post.published_at.replace(" ", "T") + "Z" : undefined, modifiedTime: post.updated_at.replace(" ", "T") + "Z", authors: [resolveAuthor(post.author_name, post.author_photo).name],
+    },
+    twitter: { card: "summary_large_image", title: post.title, description, images: [post.cover ?? "/profile.jpg"] },
   };
 }
 
 export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
   const post = await getPost((await params).slug);
   if (!post) notFound();
+  const author = resolveAuthor(post.author_name, post.author_photo);
+  const abs = (u: string) => (u.startsWith("/") ? site.url + u : u);
+  const url = `${site.url}/blog/${post.slug}`;
+  // Google's article + breadcrumb data, built from the post every time (nothing to fill in)
+  const ld = [
+    {
+      "@context": "https://schema.org", "@type": "BlogPosting",
+      headline: post.title, description: post.description || autoDescription(post.body), image: abs(post.cover ?? "/profile.jpg"),
+      datePublished: post.published_at ? post.published_at.replace(" ", "T") + "Z" : undefined,
+      dateModified: post.updated_at ? post.updated_at.replace(" ", "T") + "Z" : undefined,
+      author: { "@type": "Person", name: author.name, url: site.url + "/about" },
+      publisher: { "@type": "Person", name: site.name, url: site.url },
+      mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    },
+    {
+      "@context": "https://schema.org", "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: site.url },
+        { "@type": "ListItem", position: 2, name: "Blog", item: site.url + "/blog" },
+        { "@type": "ListItem", position: 3, name: post.title, item: url },
+      ],
+    },
+  ];
   const more = (await listPosts()).filter((p) => p.slug !== post.slug).slice(0, 3);
   return (
     <div className="page">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld).replace(/</g, "\\u003c") }} />
       <SiteFx />
       <div className="post-page">
         <PostArticle title={post.title} description={post.description} blocks={post.body}

@@ -32,6 +32,14 @@ export function headingIds(blocks: Block[]): Map<number, string> {
   return ids;
 }
 
+// Google description when the writer left it empty: the first paragraph, cut at a word near 155 characters.
+export function autoDescription(blocks: Block[]): string {
+  const p = blocks.find((b) => b.type === "paragraph");
+  const t = p && p.type === "paragraph" ? p.runs.map((r) => r.text).join("").replace(/\s+/g, " ").trim() : "";
+  if (t.length <= 155) return t;
+  return t.slice(0, 155).replace(/\s+\S*$/, "") + "…";
+}
+
 // Authors. A post stores author_name "" for the default author (Fahim, with the profile photo); anyone else by name + optional photo.
 export type Author = { name: string; photo: string | null };
 export const DEFAULT_AUTHOR = { name: "Asfequl Alam Fahim", short: "Fahim", photo: "/profile.jpg" };
