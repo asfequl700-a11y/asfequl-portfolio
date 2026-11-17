@@ -6,6 +6,7 @@ import Link from "next/link";
 import { safeHref, SLUG_RE, TOPICS, FEATURED_LABELS, cleanTopic, sortTopics, cleanAuthor, resolveAuthor, DEFAULT_AUTHOR, type Block, type Run } from "@/lib/blog-shared";
 import PostArticle from "@/components/PostArticle";
 import { FinalCta } from "@/components/ui";
+import { markdownToBlocks, blocksToMarkdown } from "@/lib/markdown";
 
 // Layout: the page you write on (left) + a sticky drawer with publish buttons, blocks and settings (right).
 // Text blocks are contentEditable boxes that own their text after the first fill (re-filling on every key would jump the cursor).
@@ -20,6 +21,7 @@ const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 const slugify = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 80);
 const ytId = (s: string) => (/^[\w-]{11}$/.test(s.trim()) ? s.trim() : s.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/)?.[1] ?? "");
 const cut = (s: string, n: number) => (s.length > n ? s.slice(0, n - 1) + "…" : s);
+const PLACEHOLDER_MD = "# Title\n\n## Heading\n\nA paragraph with **bold**.\n\n![alt text](image)\n\n:::cta\nMessage | Button text | /contact\n:::";
 const TEXT_KINDS: Kind[] = ["p", "h1", "h2", "h3", "ul", "ol", "quote"];
 
 function make(kind: Kind, text = ""): Block {
@@ -253,7 +255,9 @@ export default function PostEditor({ slug: editSlug }: { slug?: string }) {
   const [cur, setCur] = useState<string | null>(null); // the block you are working in
   const [pickKey, setPickKey] = useState<string | null>(null); // new Image block: open the file window once
   const [tab, setTab] = useState<"blocks" | "settings">("blocks");
-  const [preview, setPreview] = useState(false);
+  const [mode, setMode] = useState<"edit" | "md" | "preview">("edit"); // the three views of the page
+  const preview = mode === "preview";
+  const [md, setMd] = useState(""); // the text in Markdown view
   const [dragging, setDragging] = useState(false);
   const [over, setOver] = useState<number | null>(null);
   const [tip, setTip] = useState("");
@@ -343,6 +347,18 @@ export default function PostEditor({ slug: editSlug }: { slug?: string }) {
     setAuthorName(name);
     setAuthorPhoto(photo);
     setNewAuthor(null);
+  }
+
+  // Edit / Markdown / Preview. Leaving Markdown turns its text into blocks; entering it writes the blocks as markdown.
+  function switchMode(next: "edit" | "md" | "preview") {
+    if (next === mode) return;
+    if (mode === "md") {
+      const { title: t, blocks: bs } = markdownToBlocks(md);
+      if (t) { setTitle(t); if (!slugTouched) setSlug(slugify(t)); }
+      setBlocks(bs.length ? bs.map((b) => ({ ...b, k: newId() })) : [{ k: newId(), type: "paragraph", runs: [] }]);
+    }
+    if (next === "md") setMd(blocksToMarkdown(title.trim(), blocks.map(({ k: _k, ...b }) => b as Block))); // eslint-disable-line @typescript-eslint/no-unused-vars
+    setMode(next);
   }
 
   // ---- block changes ----
@@ -452,6 +468,7 @@ export default function PostEditor({ slug: editSlug }: { slug?: string }) {
 
   async function save(to: "draft" | "published") {
     setMsg(null);
+    if (mode === "md") return setMsg({ ok: false, text: "Switch to Edit or Preview first, then save." });
     if (!title.trim()) return setMsg({ ok: false, text: "Add a title first." });
     if (!SLUG_RE.test(slug)) return setMsg({ ok: false, text: "The web address can only have small letters, numbers and dashes." });
     const body: Block[] = [];
@@ -536,7 +553,7 @@ export default function PostEditor({ slug: editSlug }: { slug?: string }) {
   return (
     <div className={`ed ${preview ? "ed-previewing" : ""}`}>
       {/* ---------------- the text tools (thin bar, left) ---------------- */}
-      {!preview && <nav className="ed-rail" role="toolbar" aria-orientation="vertical" aria-label="Text formatting">
+      {mode === "edit" && <nav className="ed-rail" role="toolbar" aria-orientation="vertical" aria-label="Text formatting">
         <button type="button" className={fb("p")} onMouseDown={keep} onClick={() => convert("p")} title="Normal text">P</button>
         <button type="button" className={fb("h1")} onMouseDown={keep} onClick={() => convert("h1")} title="Big heading">H1</button>
         <button type="button" className={fb("h2")} onMouseDown={keep} onClick={() => convert("h2")} title="Heading">H2</button>
@@ -571,7 +588,14 @@ export default function PostEditor({ slug: editSlug }: { slug?: string }) {
         </main>
       )}
 
-      {!preview && <main className="ed-main">
+      {mode === "md" && (
+        <main className="ed-main ed-md" aria-label="Markdown view">
+          <p className="ed-md-hint">Markdown view. Paste or write here. Switch to Edit and it turns into blocks: <b>#</b> title, <b>##</b> heading, <b>![alt](image)</b> empty image box, <b>:::cta</b> button box. Save from Edit or Preview.</p>
+          <textarea className="ed-md-box" spellCheck={false} aria-label="Markdown" value={md} placeholder={PLACEHOLDER_MD} onChange={(e) => setMd(e.target.value)} />
+        </main>
+      )}
+
+      {mode === "edit" && <main className="ed-main">
         {link && (
           <div className="ed-linkrow">
             <label className="ed-sr" htmlFor="ed-linkurl">Link address</label>
@@ -712,10 +736,13 @@ export default function PostEditor({ slug: editSlug }: { slug?: string }) {
           </div>
         </section>
 
-        <button type="button" className={`ed-btn ed-prev-toggle ${preview ? "on" : ""}`} aria-pressed={preview} onClick={() => setPreview((v) => !v)}>
-          <I d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6" />
-          {preview ? "Back to editing" : "Preview"}
-        </button>
+        <div className="ed-tabs" role="tablist" aria-label="View">
+          {(["edit", "md", "preview"] as const).map((m) => (
+            <button key={m} type="button" role="tab" aria-selected={mode === m} className={`ed-tab ${mode === m ? "ed-tab-on" : ""}`} onClick={() => switchMode(m)}>
+              {m === "edit" ? "Edit" : m === "md" ? "Markdown" : "Preview"}
+            </button>
+          ))}
+        </div>
 
         <div className="ed-tabs" role="tablist" aria-label="Panel">
           <button type="button" role="tab" aria-selected={tab === "blocks"} className={`ed-tab ${tab === "blocks" ? "ed-tab-on" : ""}`} onClick={() => setTab("blocks")}>Blocks</button>

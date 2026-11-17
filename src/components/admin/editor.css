@@ -140,3 +140,9 @@ html:has(.ed),body:has(.ed){overflow:hidden}
 
 .ed-drop-sm{min-height:110px}
 .ed-img-sm{width:96px;height:96px;border-radius:50%;object-fit:cover;display:block}
+
+/* Markdown view: the whole page is one big text box */
+.ed-md{display:flex;flex-direction:column;gap:12px}
+.ed-md-hint{font-size:13px;color:#9AA6CF;margin:0}
+.ed-md-box{box-sizing:border-box;flex:1 1 auto;min-height:70vh;width:100%;resize:none;background:#152049;color:#E8ECFF;border:1px solid #2A3769;border-radius:14px;padding:22px 24px;font:15px/1.7 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.ed-md-box:focus{outline:2px solid #FF6B1A;outline-offset:2px}
