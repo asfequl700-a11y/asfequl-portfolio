@@ -5,7 +5,7 @@ export const site = {
   name: "Asfequl Alam Fahim",
   url: "https://hellofahim.com",
   email: "asfequl@hellofahim.com",
-  linkedin: "https://www.linkedin.com/in/asfequl-alam-fahim-474182399/",
+  linkedin: "https://www.linkedin.com/in/asfequlalamfahim/",
   x: "https://x.com/Asfequl_Alam",
 };
 
